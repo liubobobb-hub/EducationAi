@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phonics Play with Benny! | LearnFun</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .phonics-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .phonics-game {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .game-title {
+            font-size: 1.6em;
+            color: #007bff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .sound-groups {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .sound-group-tab {
+            padding: 10px 15px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .sound-group-tab.active {
+            background: #FFC107;
+            color: white;
+        }
+        
+        .sound-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .sound-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #f8f9fa;
+            border: 2px solid #FFC107;
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .sound-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        
+        .sound-text {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .sound-image {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+        }
+        
+        .sound-word {
+            margin-top: 10px;
+            font-size: 1em;
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #FFC107;
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        
+        .back-button:hover {
+            background-color: #FFB300;
+        }
+        
+        /* For tablets and below */
+        @media (max-width: 768px) {
+            .sound-cards {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+            
+            .sound-text {
+                font-size: 1.5em;
+            }
+            
+            .sound-image {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header>
+            <a href="index.html" class="logo-link">
+                <div class="logo">
+                    <img src="images/benny_bunny_head.png" alt="Benny Bunny Icon" class="logo-bunny-head">
+                    <h1>LearnFun</h1>
+                </div>
+            </a>
+            <a href="#" class="parents-link">For Parents</a>
+        </header>
+
+        <main>
+            <div class="subject-header">
+                <img src="images/benny_bunny_wave.png" alt="Benny the Bunny Waving" class="subject-mascot">
+                <div class="subject-title">
+                    <h2>Phonics Play!</h2>
+                    <p>Learn letter sounds with Benny! Click on any card to hear the sound.</p>
+                </div>
+            </div>
+
+            <div class="phonics-container">
+                <div class="phonics-game">
+                    <div class="game-title">Letter Sounds</div>
+                    
+                    <div class="sound-groups">
+                        <div class="sound-group-tab active" data-group="basic">Basic Sounds</div>
+                        <div class="sound-group-tab" data-group="blends">Blends</div>
+                        <div class="sound-group-tab" data-group="digraphs">Digraphs</div>
+                    </div>
+                    
+                    <div class="sound-cards" id="soundCards">
+                        <!-- Sound cards will be generated by JavaScript -->
+                    </div>
+                </div>
+                
+                <a href="english.html" class="back-button">Back to English</a>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2023 Your LearnFun Site</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const soundCards = document.getElementById('soundCards');
+            const soundGroupTabs = document.querySelectorAll('.sound-group-tab');
+            
+            // Define sound groups
+            const soundGroups = {
+                basic: [
+                    { sound: 'a', word: 'apple', image: 'images/apple_icon.png' },
+                    { sound: 'b', word: 'ball', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'c', word: 'cat', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'd', word: 'dog', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'e', word: 'egg', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'f', word: 'fish', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'g', word: 'goat', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'h', word: 'hat', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'i', word: 'igloo', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'j', word: 'jam', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'k', word: 'kite', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'l', word: 'lion', image: 'images/icon_placeholder_book.png' }
+                ],
+                blends: [
+                    { sound: 'bl', word: 'blue', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'cl', word: 'cloud', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'fl', word: 'flower', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'gl', word: 'glue', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'pl', word: 'play', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'sl', word: 'slide', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'br', word: 'brush', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'cr', word: 'crab', image: 'images/icon_placeholder_book.png' }
+                ],
+                digraphs: [
+                    { sound: 'ch', word: 'chicken', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'sh', word: 'ship', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'th', word: 'three', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'wh', word: 'whale', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'ph', word: 'phone', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'ee', word: 'tree', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'oo', word: 'book', image: 'images/icon_placeholder_book.png' },
+                    { sound: 'ai', word: 'rain', image: 'images/icon_placeholder_book.png' }
+                ]
+            };
+            
+            // Function to display sound cards
+            function displaySoundCards(groupName) {
+                soundCards.innerHTML = '';
+                
+                soundGroups[groupName].forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'sound-card';
+                    
+                    const soundText = document.createElement('div');
+                    soundText.className = 'sound-text';
+                    soundText.textContent = item.sound;
+                    
+                    const soundImage = document.createElement('img');
+                    soundImage.className = 'sound-image';
+                    soundImage.src = item.image;
+                    soundImage.alt = item.word;
+                    
+                    const soundWord = document.createElement('div');
+                    soundWord.className = 'sound-word';
+                    soundWord.textContent = item.word;
+                    
+                    card.appendChild(soundText);
+                    card.appendChild(soundImage);
+                    card.appendChild(soundWord);
+                    
+                    // Add click event to play sound
+                    card.addEventListener('click', () => {
+                        // Play sound effect
+                        try {
+                            const soundFile = `sounds/phonics/${item.sound.toLowerCase()}.mp3`;
+                            const sound = new Audio(soundFile);
+                            sound.play().catch(e => console.warn(`Could not play sound for ${item.sound}`, e));
+                        } catch (e) {
+                            console.warn(`Sound file for ${item.sound} not found.`);
+                        }
+                        
+                        // Highlight card
+                        card.style.backgroundColor = '#FFF9C4';
+                        setTimeout(() => {
+                            card.style.backgroundColor = '#f8f9fa';
+                        }, 500);
+                    });
+                    
+                    soundCards.appendChild(card);
+                });
+            }
+            
+            // Initialize with basic sounds
+            displaySoundCards('basic');
+            
+            // Tab click events
+            soundGroupTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs
+                    soundGroupTabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    tab.classList.add('active');
+                    
+                    // Display sound cards for selected group
+                    const groupName = tab.dataset.group;
+                    displaySoundCards(groupName);
+                });
+            });
+            
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html> 

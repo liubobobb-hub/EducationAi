@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shape Shifters with Benny! | LearnFun</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .shapes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .shape-card {
+            background: #ffffff;
+            border: 3px solid #9C27B0;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .shape-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .shape-display {
+            margin: 15px auto;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .shape-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #9C27B0;
+            margin-top: 10px;
+        }
+        
+        /* Shape styles */
+        .circle {
+            width: 80px;
+            height: 80px;
+            background-color: #E1BEE7;
+            border: 3px solid #9C27B0;
+            border-radius: 50%;
+        }
+        
+        .square {
+            width: 80px;
+            height: 80px;
+            background-color: #E1BEE7;
+            border: 3px solid #9C27B0;
+        }
+        
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: 45px solid transparent;
+            border-right: 45px solid transparent;
+            border-bottom: 80px solid #E1BEE7;
+            position: relative;
+        }
+        
+        .triangle:after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: -41px;
+            width: 0;
+            height: 0;
+            border-left: 41px solid transparent;
+            border-right: 41px solid transparent;
+            border-bottom: 74px solid #E1BEE7;
+        }
+        
+        .rectangle {
+            width: 100px;
+            height: 60px;
+            background-color: #E1BEE7;
+            border: 3px solid #9C27B0;
+        }
+        
+        .oval {
+            width: 100px;
+            height: 60px;
+            background-color: #E1BEE7;
+            border: 3px solid #9C27B0;
+            border-radius: 50%;
+        }
+        
+        .star {
+            position: relative;
+            display: inline-block;
+            width: 0;
+            height: 0;
+            margin-left: 40px;
+            margin-top: 20px;
+            border-right: 30px solid transparent;
+            border-bottom: 21px solid #E1BEE7;
+            border-left: 30px solid transparent;
+            transform: rotate(35deg);
+        }
+        
+        .star:before {
+            border-bottom: 24px solid #E1BEE7;
+            border-left: 9px solid transparent;
+            border-right: 9px solid transparent;
+            position: absolute;
+            height: 0;
+            width: 0;
+            top: -13px;
+            left: -21px;
+            display: block;
+            content: '';
+            transform: rotate(-35deg);
+        }
+        
+        .star:after {
+            position: absolute;
+            display: block;
+            top: 0px;
+            left: -32px;
+            width: 0;
+            height: 0;
+            border-right: 30px solid transparent;
+            border-bottom: 21px solid #E1BEE7;
+            border-left: 30px solid transparent;
+            transform: rotate(-70deg);
+            content: '';
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #9C27B0;
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        
+        .back-button:hover {
+            background-color: #7B1FA2;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header>
+            <a href="index.html" class="logo-link">
+                <div class="logo">
+                    <img src="images/benny_bunny_head.png" alt="Benny Bunny Icon" class="logo-bunny-head">
+                    <h1>LearnFun</h1>
+                </div>
+            </a>
+            <a href="#" class="parents-link">For Parents</a>
+        </header>
+
+        <main>
+            <div class="subject-header">
+                <img src="images/benny_bunny_wave.png" alt="Benny the Bunny Waving" class="subject-mascot">
+                <div class="subject-title">
+                    <h2>Shape Shifters!</h2>
+                    <p>Click on the shapes to learn their names and hear how they sound!</p>
+                </div>
+            </div>
+
+            <div class="shapes-container" id="shapesContainer">
+                <!-- Shapes will be added here -->
+            </div>
+
+            <a href="math.html" class="back-button">Back to Math Adventures</a>
+        </main>
+
+        <footer>
+            <p>© 2023 Your LearnFun Site</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const shapesContainer = document.getElementById('shapesContainer');
+            
+            // Shape data
+            const shapes = [
+                { name: 'Circle', class: 'circle' },
+                { name: 'Square', class: 'square' },
+                { name: 'Triangle', class: 'triangle' },
+                { name: 'Rectangle', class: 'rectangle' },
+                { name: 'Oval', class: 'oval' },
+                { name: 'Star', class: 'star' }
+            ];
+            
+            // Create shape cards
+            shapes.forEach(shape => {
+                const card = document.createElement('div');
+                card.className = 'shape-card';
+                
+                const shapeDisplay = document.createElement('div');
+                shapeDisplay.className = 'shape-display';
+                
+                const shapeElement = document.createElement('div');
+                shapeElement.className = shape.class;
+                
+                const shapeName = document.createElement('div');
+                shapeName.className = 'shape-name';
+                shapeName.textContent = shape.name;
+                
+                shapeDisplay.appendChild(shapeElement);
+                card.appendChild(shapeDisplay);
+                card.appendChild(shapeName);
+                
+                // Add click event
+                card.addEventListener('click', () => {
+                    // Try to play shape sound
+                    try {
+                        const sound = new Audio(`sounds/shapes/${shape.name.toLowerCase()}.mp3`);
+                        sound.play().catch(e => console.warn(`Could not play sound for shape ${shape.name}`, e));
+                    } catch (e) {
+                        console.warn(`Sound file for shape ${shape.name} not found.`);
+                    }
+                    
+                    // Highlight the card
+                    card.style.backgroundColor = '#F3E5F5';
+                    setTimeout(() => {
+                        card.style.backgroundColor = '#ffffff';
+                    }, 500);
+                });
+                
+                shapesContainer.appendChild(card);
+            });
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html> 

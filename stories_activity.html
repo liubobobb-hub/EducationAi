@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Time with Benny! | LearnFun</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .stories-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .story-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 900px;
+            margin-bottom: 30px;
+        }
+        
+        .story-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .story-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .story-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-bottom: 3px solid #FFC107;
+        }
+        
+        .story-info {
+            padding: 15px;
+        }
+        
+        .story-title {
+            font-size: 1.3em;
+            color: #007bff;
+            margin-bottom: 8px;
+        }
+        
+        .story-description {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .story-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 100;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 800px;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #333;
+        }
+        
+        .story-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .story-header-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-right: 20px;
+        }
+        
+        .story-content {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .story-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .control-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            background-color: #FFC107;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .control-button:hover {
+            background-color: #FFB300;
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #FFC107;
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        
+        .back-button:hover {
+            background-color: #FFB300;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header>
+            <a href="index.html" class="logo-link">
+                <div class="logo">
+                    <img src="images/benny_bunny_head.png" alt="Benny Bunny Icon" class="logo-bunny-head">
+                    <h1>LearnFun</h1>
+                </div>
+            </a>
+            <a href="#" class="parents-link">For Parents</a>
+        </header>
+
+        <main>
+            <div class="subject-header">
+                <img src="images/benny_bunny_wave.png" alt="Benny the Bunny Waving" class="subject-mascot">
+                <div class="subject-title">
+                    <h2>Story Time!</h2>
+                    <p>Listen to exciting stories with Benny!</p>
+                </div>
+            </div>
+
+            <div class="stories-container">
+                <div class="story-list" id="storyList">
+                    <!-- Stories will be generated by JavaScript -->
+                </div>
+                <a href="english.html" class="back-button">Back to English</a>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2023 Your LearnFun Site</p>
+        </footer>
+    </div>
+
+    <!-- Story Modal -->
+    <div class="story-modal" id="storyModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <div class="story-header">
+                <img src="" alt="Story Image" class="story-header-image" id="modalImage">
+                <h2 id="modalTitle"></h2>
+            </div>
+            <div class="story-content" id="storyContent"></div>
+            <div class="story-controls">
+                <button class="control-button" id="playButton">Play</button>
+                <button class="control-button" id="pauseButton">Pause</button>
+                <button class="control-button" id="stopButton">Stop</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Story data
+            const stories = [
+                {
+                    id: 1,
+                    title: "Benny's Big Adventure",
+                    description: "Join Benny Bunny on his exciting adventure in the forest!",
+                    image: "images/icon_placeholder_storybook.png", // Replace with actual story images
+                    content: `<p>Once upon a time, there was a little bunny named Benny. Benny lived in a cozy burrow with his family at the edge of a big forest.</p>
+                    <p>One sunny morning, Benny decided to explore the forest. "I'll be back before lunch," he told his mother.</p>
+                    <p>As Benny hopped through the forest, he met many new friends. First, he met Oliver the Owl who was just waking up.</p>
+                    <p>"Good morning!" said Benny.</p>
+                    <p>"Hoo-hoo! It's actually my bedtime," yawned Oliver. "I stay awake all night and sleep during the day."</p>
+                    <p>Next, Benny met Sammy the Squirrel who was collecting acorns.</p>
+                    <p>"Would you like to help me?" asked Sammy.</p>
+                    <p>Benny helped Sammy collect acorns for a while. It was fun!</p>
+                    <p>Later, Benny found a beautiful meadow full of carrots! He was so excited that he almost forgot about going home for lunch.</p>
+                    <p>"Oh no!" said Benny. "I need to go back home!"</p>
+                    <p>Benny tried to find his way, but he was lost. He felt scared.</p>
+                    <p>Just then, Oliver the Owl flew by. "Do you need help, Benny?" he asked.</p>
+                    <p>"Yes, please! I can't find my way home," said Benny.</p>
+                    <p>Oliver flew high above the trees. "Follow me!" he said.</p>
+                    <p>With Oliver's help, Benny found his way back to his cozy burrow just in time for lunch.</p>
+                    <p>"I had a big adventure today," Benny told his mother. "And I made new friends!"</p>
+                    <p>That night, Benny dreamed about his next adventure in the forest.</p>
+                    <p>The End.</p>`
+                },
+                {
+                    id: 2,
+                    title: "The Lost Star",
+                    description: "Help Benny find the lost star in this magical story!",
+                    image: "images/icon_placeholder_storybook.png",
+                    content: `<p>High in the night sky, the stars were playing hide and seek.</p>
+                    <p>Little Star was having so much fun that she didn't notice how far she had wandered from the others.</p>
+                    <p>Suddenly, she fell from the sky and landed in Benny Bunny's garden with a soft "plop!"</p>
+                    <p>Benny was eating his bedtime carrot when he saw a golden glow outside his window.</p>
+                    <p>"What could that be?" he wondered.</p>
+                    <p>When Benny went outside, he found Little Star crying in his carrot patch.</p>
+                    <p>"Why are you crying?" asked Benny.</p>
+                    <p>"I fell from the sky," sniffled Little Star. "Now I can't get back home."</p>
+                    <p>"Don't worry," said Benny. "I'll help you get home!"</p>
+                    <p>Benny thought and thought. How could he help a star get back to the sky?</p>
+                    <p>He tried throwing Little Star as high as he could, but she just came back down.</p>
+                    <p>He tried using a seesaw to launch her up, but that didn't work either.</p>
+                    <p>Just when they were about to give up, Benny had an idea. "Let's climb the Tall Mountain! It's the highest place around."</p>
+                    <p>So Benny put Little Star in his pocket, and they set off to climb the Tall Mountain.</p>
+                    <p>When they reached the top, they were much closer to the sky.</p>
+                    <p>"Thank you, Benny," said Little Star. "Now I can jump back up to my friends."</p>
+                    <p>Little Star gave Benny a big hug that made him glow all golden, then she jumped back up into the night sky.</p>
+                    <p>From that night on, whenever Benny looked up at the stars, one star always seemed to twinkle just for him.</p>
+                    <p>The End.</p>`
+                },
+                {
+                    id: 3,
+                    title: "The Rainbow Garden",
+                    description: "Discover the magic of colors with Benny and his friends!",
+                    image: "images/icon_placeholder_storybook.png",
+                    content: `<p>Benny Bunny loved his garden, but all his flowers were white. Every single one!</p>
+                    <p>"I wish my garden had more colors," Benny said one day.</p>
+                    <p>That night, there was a big rainstorm. Thunder boomed and lightning flashed.</p>
+                    <p>In the morning, Benny looked out his window and saw something amazing. A beautiful rainbow was arching right over his garden!</p>
+                    <p>"Wow!" said Benny. He hopped outside to look at the rainbow.</p>
+                    <p>As Benny watched, drops of color began to fall from the rainbow. Red, orange, yellow, green, blue, indigo, and violet drops rained down on his white flowers.</p>
+                    <p>To his surprise, each flower that a colored drop touched changed to that color!</p>
+                    <p>Soon, Benny's garden was full of colorful flowers. Red roses, orange marigolds, yellow daffodils, green ferns, blue violets, indigo morning glories, and purple lavender.</p>
+                    <p>"This is wonderful!" said Benny, dancing around his colorful garden.</p>
+                    <p>Benny's friends came to see his rainbow garden. "How did this happen?" they asked.</p>
+                    <p>Benny pointed to the sky, but the rainbow was gone. "It was rainbow magic," he said with a smile.</p>
+                    <p>From that day on, Benny shared seeds from his colorful flowers with all his friends so everyone could have rainbow gardens.</p>
+                    <p>And sometimes, after it rains, Benny looks up at the sky and whispers, "Thank you, Rainbow, for my colorful garden."</p>
+                    <p>The End.</p>`
+                }
+            ];
+            
+            const storyList = document.getElementById('storyList');
+            const storyModal = document.getElementById('storyModal');
+            const closeModal = document.getElementById('closeModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalImage = document.getElementById('modalImage');
+            const storyContent = document.getElementById('storyContent');
+            const playButton = document.getElementById('playButton');
+            const pauseButton = document.getElementById('pauseButton');
+            const stopButton = document.getElementById('stopButton');
+            
+            let currentAudio = null;
+            
+            // Create story cards
+            stories.forEach(story => {
+                const card = document.createElement('div');
+                card.className = 'story-card';
+                card.dataset.storyId = story.id;
+                
+                card.innerHTML = `
+                    <img src="${story.image}" alt="${story.title}" class="story-image">
+                    <div class="story-info">
+                        <div class="story-title">${story.title}</div>
+                        <div class="story-description">${story.description}</div>
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => {
+                    openStory(story);
+                });
+                
+                storyList.appendChild(card);
+            });
+            
+            // Open story modal
+            function openStory(story) {
+                modalTitle.textContent = story.title;
+                modalImage.src = story.image;
+                modalImage.alt = story.title;
+                storyContent.innerHTML = story.content;
+                storyModal.style.display = 'block';
+                
+                // Stop any playing audio
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio = null;
+                }
+            }
+            
+            // Close modal
+            closeModal.addEventListener('click', () => {
+                storyModal.style.display = 'none';
+                // Stop any playing audio
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio = null;
+                }
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', (event) => {
+                if (event.target === storyModal) {
+                    storyModal.style.display = 'none';
+                    // Stop any playing audio
+                    if (currentAudio) {
+                        currentAudio.pause();
+                        currentAudio = null;
+                    }
+                }
+            });
+            
+            // Audio controls
+            playButton.addEventListener('click', () => {
+                const currentStoryText = storyContent.textContent;
+                
+                // Check if an audio is already playing
+                if (currentAudio) {
+                    currentAudio.play().catch(e => console.warn('Could not play audio', e));
+                } else {
+                    // Use text-to-speech if available
+                    if ('speechSynthesis' in window) {
+                        const speech = new SpeechSynthesisUtterance(currentStoryText);
+                        speech.rate = 0.9; // Slightly slower for clarity
+                        speech.pitch = 1.1; // Slightly higher pitch for child-friendly voice
+                        
+                        currentAudio = {
+                            pause: () => window.speechSynthesis.pause(),
+                            resume: () => window.speechSynthesis.resume(),
+                            cancel: () => window.speechSynthesis.cancel(),
+                            play: () => {
+                                window.speechSynthesis.cancel(); // Cancel any ongoing speech
+                                window.speechSynthesis.speak(speech);
+                                return Promise.resolve();
+                            }
+                        };
+                        
+                        currentAudio.play();
+                    } else {
+                        alert("Sorry, your browser doesn't support text-to-speech!");
+                    }
+                }
+            });
+            
+            pauseButton.addEventListener('click', () => {
+                if (currentAudio) {
+                    if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+                        window.speechSynthesis.pause();
+                    } else {
+                        currentAudio.pause();
+                    }
+                }
+            });
+            
+            stopButton.addEventListener('click', () => {
+                if (currentAudio) {
+                    if ('speechSynthesis' in window) {
+                        window.speechSynthesis.cancel();
+                    } else {
+                        currentAudio.pause();
+                        currentAudio = null;
+                    }
+                }
+            });
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html> 

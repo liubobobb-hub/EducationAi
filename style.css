@@ -1,0 +1,327 @@
+/* Basic Reset & Global Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --primary-color: #4CAF50;
+    --accent-color-math: #4CAF50;
+    --accent-color-english: #FF9800;
+    --text-color: #333;
+    --light-text-color: white;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: #87CEEB; /* Sky Blue */
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    overflow-x: hidden; /* Prevent horizontal scroll on very small screens */
+}
+
+.page-container {
+    background-color: #f0f8ff; /* AliceBlue - like a very light cream/off-white for content area */
+    border-radius: 20px;
+    padding: 20px 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px; /* Max width of content area */
+    text-align: center;
+}
+
+/* Header Styles */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px dashed #FFD700; /* Sunny Yellow dashed line */
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-bunny-head {
+    width: 40px; /* Adjust size as needed */
+    height: auto;
+    margin-right: 10px;
+}
+
+.logo h1 {
+    font-size: 2.5em; /* Large, friendly font */
+    color: #007bff; /* Bright Blue */
+}
+
+.parents-link {
+    font-size: 0.9em;
+    color: #555;
+    text-decoration: none;
+    background-color: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+.parents-link:hover {
+    background-color: #e0e0e0;
+}
+
+/* Main Content - Mascot */
+.mascot-area {
+    margin-bottom: 30px;
+    position: relative; /* For speech bubble positioning */
+}
+
+#bennyMascot {
+    max-width: 150px; /* Adjust as needed */
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.speech-bubble {
+    background-color: #ffffff;
+    border: 2px solid #FFD700; /* Sunny Yellow border */
+    border-radius: 15px; /* Rounded corners like a speech bubble */
+    padding: 15px 20px;
+    font-size: 1.2em;
+    color: #333;
+    display: inline-block; /* So it doesn't take full width */
+    max-width: 80%;
+    position: relative; /* For the little triangle */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Speech bubble triangle - pseudo-element */
+.speech-bubble::before {
+    content: "";
+    position: absolute;
+    bottom: 100%; /* Positioned above the bubble */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #FFD700; /* Matches border color */
+}
+.speech-bubble::after { /* Inner part of triangle to match background */
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: -2px; /* Slightly overlap to cover border */
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #ffffff; /* Matches bubble background */
+}
+
+
+/* Navigation Buttons */
+.navigation-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 30px; /* Space between buttons */
+    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+}
+
+.nav-button {
+    padding: 25px 30px; /* Large padding for bigger tap targets */
+    border-radius: 20px; /* Very rounded corners */
+    text-decoration: none;
+    font-size: 1.8em; /* Large text */
+    font-weight: bold;
+    color: white;
+    display: flex;
+    flex-direction: column; /* Icon above text */
+    align-items: center;
+    justify-content: center;
+    min-width: 180px; /* Minimum width for buttons */
+    min-height: 150px;
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+}
+
+.nav-button:hover {
+    transform: translateY(-5px) scale(1.05); /* Slight lift and grow effect */
+    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+}
+.nav-button:active {
+    transform: translateY(-2px) scale(1.02); /* Slight press effect */
+    box-shadow: 0 3px 7px rgba(0,0,0,0.1);
+}
+
+.button-icon {
+    width: 60px; /* Adjust icon size */
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.english-button {
+    background-color: #FFC107; /* Sunny Yellow */
+}
+
+.math-button {
+    background-color: #4CAF50; /* Grass Green */
+}
+
+/* Footer Styles */
+footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #ccc;
+    font-size: 0.8em;
+    color: #777;
+}
+
+/* Basic Responsiveness for smaller screens */
+@media (max-width: 600px) {
+    .logo h1 {
+        font-size: 2em;
+    }
+    .navigation-buttons {
+        flex-direction: column; /* Stack buttons vertically */
+        gap: 20px;
+    }
+    .nav-button {
+        font-size: 1.5em;
+        min-width: 200px; /* Allow full width if needed */
+        padding: 20px;
+    }
+    #bennyMascot {
+        max-width: 120px;
+    }
+    .speech-bubble {
+        font-size: 1em;
+    }
+}
+
+/* Add to your style.css */
+
+/* Styling for Subject Pages (English, Math) */
+.subject-header {
+    display: flex;
+    flex-direction: column; /* Stack mascot and title on smaller screens */
+    align-items: center;
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 0 20px;
+}
+
+.subject-mascot {
+    max-width: 150px; /* Slightly smaller mascot for subject pages */
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.subject-title h2 {
+    font-size: 2.5em;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.subject-title p {
+    font-size: 1.2em;
+    color: var(--text-color);
+    max-width: 600px;
+}
+
+.activity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid */
+    gap: 25px;
+    padding: 0 20px; /* Add some padding to the grid container */
+    width: 100%;
+    max-width: 900px; /* Max width for the grid */
+    margin-top: 20px;
+}
+
+.activity-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Vertically center content */
+    text-decoration: none;
+    color: var(--light-text-color);
+    padding: 25px 15px; /* More padding */
+    border-radius: 20px; /* More rounded corners */
+    text-align: center;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-height: 220px; /* Ensure cards have a good height */
+}
+
+.activity-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.activity-card.english-theme {
+    background-color: var(--accent-color-english);
+}
+.activity-card.english-theme:hover {
+    background-color: #e09010; /* Darker shade of orange on hover */
+}
+
+.activity-card.math-theme {
+    background-color: var(--accent-color-math);
+}
+.activity-card.math-theme:hover {
+    background-color: #6cc018; /* Darker shade of green on hover */
+}
+
+.activity-icon {
+    width: 60px; /* Adjust size as needed */
+    height: 60px;
+    margin-bottom: 15px;
+    object-fit: contain; /* Ensures icon is scaled nicely */
+    background-color: rgba(255, 255, 255, 0.2); /* Light background for icons */
+    border-radius: 50%;
+    padding: 8px;
+}
+
+.activity-card span {
+    font-size: 1.4em;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.activity-description {
+    font-size: 0.95em;
+    line-height: 1.4;
+    color: var(--light-text-color); /* Or a slightly darker shade if needed for readability */
+}
+
+/* Placeholder image styling (if you use actual placeholders) */
+img[src*="icon_placeholder_"] {
+    background-color: rgba(255, 255, 255, 0.3); /* Light background for placeholders */
+    border-radius: 50%;
+    padding: 8px;
+}
+
+
+/* Responsive adjustments for subject header */
+@media (min-width: 600px) {
+    .subject-header {
+        flex-direction: row; /* Side-by-side layout for mascot and title */
+        text-align: left;
+        gap: 30px; /* Space between mascot and text */
+    }
+
+    .subject-mascot {
+        margin-bottom: 0; /* Remove bottom margin when side-by-side */
+    }
+
+    .activity-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Slightly larger min-width for cards on wider screens */
+    }
+}

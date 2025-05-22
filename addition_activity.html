@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Sums with Benny! | LearnFun</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .addition-container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 3px solid #2196F3;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .addition-problem {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2196F3;
+        }
+        
+        .number, .operator {
+            margin: 0 10px;
+        }
+        
+        .answer-input {
+            width: 80px;
+            height: 60px;
+            font-size: 1.5em;
+            text-align: center;
+            border: 3px solid #2196F3;
+            border-radius: 10px;
+            margin: 0 10px;
+            padding: 5px;
+            color: #2196F3;
+            font-weight: bold;
+        }
+        
+        .check-button, .next-button {
+            display: inline-block;
+            margin: 20px 10px;
+            padding: 10px 20px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .check-button:hover, .next-button:hover {
+            background-color: #1976D2;
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            min-height: 30px;
+        }
+        
+        .correct {
+            color: #4CAF50;
+        }
+        
+        .incorrect {
+            color: #F44336;
+        }
+        
+        .controls {
+            text-align: center;
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #2196F3;
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        
+        .back-button:hover {
+            background-color: #1976D2;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header>
+            <a href="index.html" class="logo-link">
+                <div class="logo">
+                    <img src="images/benny_bunny_head.png" alt="Benny Bunny Icon" class="logo-bunny-head">
+                    <h1>LearnFun</h1>
+                </div>
+            </a>
+            <a href="#" class="parents-link">For Parents</a>
+        </header>
+
+        <main>
+            <div class="subject-header">
+                <img src="images/benny_bunny_wave.png" alt="Benny the Bunny Waving" class="subject-mascot">
+                <div class="subject-title">
+                    <h2>Simple Sums!</h2>
+                    <p>Let's practice adding numbers together with Benny!</p>
+                </div>
+            </div>
+
+            <div class="addition-container">
+                <div class="addition-problem">
+                    <div class="number" id="number1">1</div>
+                    <div class="operator">+</div>
+                    <div class="number" id="number2">2</div>
+                    <div class="operator">=</div>
+                    <input type="number" class="answer-input" id="answerInput" min="0" max="20">
+                </div>
+                
+                <div class="feedback" id="feedback"></div>
+                
+                <div class="controls">
+                    <button class="check-button" id="checkButton">Check Answer</button>
+                    <button class="next-button" id="nextButton">Next Problem</button>
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <a href="math.html" class="back-button">Back to Math Adventures</a>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2023 Your LearnFun Site</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const number1Element = document.getElementById('number1');
+            const number2Element = document.getElementById('number2');
+            const answerInput = document.getElementById('answerInput');
+            const feedbackElement = document.getElementById('feedback');
+            const checkButton = document.getElementById('checkButton');
+            const nextButton = document.getElementById('nextButton');
+            
+            let correctAnswer = 0;
+            
+            // Generate a new addition problem
+            function generateProblem() {
+                // Generate random numbers between 1 and 10
+                const num1 = Math.floor(Math.random() * 10) + 1;
+                const num2 = Math.floor(Math.random() * 10) + 1;
+                
+                number1Element.textContent = num1;
+                number2Element.textContent = num2;
+                
+                correctAnswer = num1 + num2;
+                
+                // Clear previous answer and feedback
+                answerInput.value = '';
+                feedbackElement.textContent = '';
+                feedbackElement.className = 'feedback';
+                
+                // Focus on the input field
+                answerInput.focus();
+            }
+            
+            // Check the user's answer
+            function checkAnswer() {
+                const userAnswer = parseInt(answerInput.value, 10);
+                
+                if (isNaN(userAnswer)) {
+                    feedbackElement.textContent = 'Please enter a number!';
+                    feedbackElement.className = 'feedback incorrect';
+                    return;
+                }
+                
+                if (userAnswer === correctAnswer) {
+                    feedbackElement.textContent = 'Correct! Great job!';
+                    feedbackElement.className = 'feedback correct';
+                    
+                    // Play success sound
+                    try {
+                        const sound = new Audio('sounds/correct.mp3');
+                        sound.play().catch(e => console.warn('Could not play success sound', e));
+                    } catch (e) {
+                        console.warn('Success sound file not found.');
+                    }
+                } else {
+                    feedbackElement.textContent = `Try again! ${number1Element.textContent} + ${number2Element.textContent} = ${correctAnswer}`;
+                    feedbackElement.className = 'feedback incorrect';
+                    
+                    // Play incorrect sound
+                    try {
+                        const sound = new Audio('sounds/incorrect.mp3');
+                        sound.play().catch(e => console.warn('Could not play incorrect sound', e));
+                    } catch (e) {
+                        console.warn('Incorrect sound file not found.');
+                    }
+                }
+            }
+            
+            // Add event listeners
+            checkButton.addEventListener('click', checkAnswer);
+            nextButton.addEventListener('click', generateProblem);
+            
+            // Also check answer when Enter key is pressed
+            answerInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    checkAnswer();
+                }
+            });
+            
+            // Generate the first problem
+            generateProblem();
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html> 
