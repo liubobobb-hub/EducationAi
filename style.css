@@ -264,3 +264,75 @@ img[src*="icon_placeholder_"] {
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Slightly larger min-width for cards on wider screens */
     }
 }
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Language Selector Styles */
+.language-selector {
+    position: relative;
+    width: 100px;
+}
+
+.language-dropdown {
+    width: 100%;
+    padding: 8px 30px 8px 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    color: #333;
+    background-color: #ffffff;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.language-dropdown:hover {
+    border-color: #007bff;
+    box-shadow: 0 2px 6px rgba(0, 123, 255, 0.1);
+}
+
+.language-dropdown:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+}
+
+.select-arrow {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #666;
+    pointer-events: none;
+}
+
+.language-selector:hover .select-arrow {
+    border-top-color: #007bff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .language-selector {
+        width: 90px;
+    }
+
+    .language-dropdown {
+        font-size: 13px;
+        padding: 6px 25px 6px 10px;
+    }
+}
+
+/* Remove old language toggle styles */
+.language-toggle,
+.current-lang {
+    display: none;
+}

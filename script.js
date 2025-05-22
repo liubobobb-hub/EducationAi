@@ -1,21 +1,121 @@
+// 语言配置
+const translations = {
+    zh: {
+        title: 'LearnFun 趣学习！',
+        greeting: '你好！我是小兔子邦尼！准备好开始学习了吗？',
+        english: '英语',
+        math: '数学',
+        programming: '编程',
+        profile: '我的资料',
+        forParents: '家长专区',
+        copyright: '© 2023 趣学习平台'
+    },
+    en: {
+        title: 'LearnFun with Benny!',
+        greeting: 'Hi! I\'m Benny the Bunny! Ready to learn?',
+        english: 'English',
+        math: 'Math',
+        programming: 'Programming',
+        profile: 'My Profile',
+        forParents: 'For Parents',
+        copyright: '© 2023 Your LearnFun Site'
+    }
+};
+
+// 当前语言
+let currentLang = localStorage.getItem('preferredLanguage') || 'zh';
+
 document.addEventListener('DOMContentLoaded', () => {
     const englishButton = document.getElementById('englishButton');
     const mathButton = document.getElementById('mathButton');
     const bennyMascot = document.getElementById('bennyMascot');
     const speechBubble = document.getElementById('speechBubble');
 
-    // --- Sound Effects (Make sure you have these sound files) ---
+    // --- Sound Effects ---
     let clickSound;
     let welcomeSound;
+    let soundsLoaded = false;
+    let userInteracted = false;
 
-    try {
-        clickSound = new Audio('sounds/click.mp3'); // Generic click for buttons
-        welcomeSound = new Audio('sounds/welcome_benny.mp3'); // Benny's welcome voice
-    } catch (e) {
-        console.warn("Could not load audio files. Make sure they are in the 'sounds' folder.", e);
-        // Create dummy audio objects to prevent errors if files are missing
-        clickSound = { play: () => {} };
-        welcomeSound = { play: () => {} };
+    // 初始化音频
+    function initializeSounds() {
+        try {
+            clickSound = new Audio('sounds/click.mp3');
+            welcomeSound = new Audio('sounds/welcome_benny.mp3');
+            soundsLoaded = true;
+            
+            // 预加载音频
+            clickSound.load();
+            welcomeSound.load();
+        } catch (e) {
+            console.warn("Could not load audio files. Make sure they are in the 'sounds' folder.", e);
+            soundsLoaded = false;
+        }
+    }
+
+    // 播放声音的安全包装函数
+    function playSound(sound) {
+        if (sound && soundsLoaded && userInteracted) {
+            sound.currentTime = 0;
+            sound.play().catch(error => {
+                console.log("Sound playback was prevented:", error);
+            });
+        }
+    }
+
+    // 监听用户首次交互
+    function handleFirstInteraction() {
+        userInteracted = true;
+        // 如果声音还没有加载，现在加载它们
+        if (!soundsLoaded) {
+            initializeSounds();
+        }
+        // 移除事件监听器，因为我们只需要它触发一次
+        document.removeEventListener('click', handleFirstInteraction);
+        document.removeEventListener('keydown', handleFirstInteraction);
+        document.removeEventListener('touchstart', handleFirstInteraction);
+    }
+
+    // 添加用户交互监听器
+    document.addEventListener('click', handleFirstInteraction);
+    document.addEventListener('keydown', handleFirstInteraction);
+    document.addEventListener('touchstart', handleFirstInteraction);
+
+    // --- Event Listeners for Buttons ---
+    if (englishButton) {
+        englishButton.addEventListener('click', () => {
+            playSound(clickSound);
+            console.log("English button clicked!");
+        });
+    }
+
+    if (mathButton) {
+        mathButton.addEventListener('click', () => {
+            playSound(clickSound);
+            console.log("Math button clicked!");
+        });
+    }
+
+    // --- Activity Protection ---
+    const activityLinks = document.querySelectorAll('.activity-card');
+    activityLinks.forEach(link => {
+        const originalHref = link.getAttribute('href');
+        if (originalHref) {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                if (requireLogin(originalHref)) {
+                    playSound(clickSound);
+                    window.location.href = originalHref;
+                }
+            });
+        }
+    });
+
+    // --- Mascot Interaction ---
+    if (bennyMascot) {
+        bennyMascot.addEventListener('click', () => {
+            playSound(welcomeSound);
+        });
     }
 
     // --- Authentication Functions ---
@@ -29,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function requireLogin(targetUrl) {
         if (!isLoggedIn()) {
-            // Redirect to login page with return URL
             window.location.href = `login.html?returnUrl=${encodeURIComponent(targetUrl)}`;
             return false;
         }
@@ -44,17 +143,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Update UI based on login state ---
     function updateUIForAuthState() {
-        // Update speech bubble with personalized greeting if logged in
-        if (speechBubble) {
-            if (isLoggedIn()) {
-                speechBubble.textContent = `Hi ${getUsername()}! Ready to continue learning?`;
-            }
+        if (speechBubble && isLoggedIn()) {
+            speechBubble.textContent = `Hi ${getUsername()}! Ready to continue learning?`;
         }
 
-        // Add login/logout link to header if not already present
         const header = document.querySelector('header');
         if (header) {
-            // Check if auth link already exists
             let authLink = document.getElementById('authLink');
             
             if (!authLink) {
@@ -80,66 +174,53 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Call this function on page load
+    // 初始化UI状态
     updateUIForAuthState();
 
-    // --- Event Listeners for Buttons ---
-    if (englishButton) {
-        englishButton.addEventListener('click', (event) => {
-            // event.preventDefault(); // Prevent immediate navigation if you want to do something else first
+    // 初始化语言
+    setLanguage(currentLang);
+    
+    // 语言切换按钮事件监听
+    const languageSelect = document.getElementById('languageSelect');
+    if (languageSelect) {
+        languageSelect.value = currentLang;
+        languageSelect.addEventListener('change', (e) => {
+            currentLang = e.target.value;
+            setLanguage(currentLang);
             playSound(clickSound);
-            console.log("English button clicked!");
-            // Actual navigation will happen via the href in HTML.
-            // If this were a single-page app, you'd load content here.
+            
+            document.body.style.opacity = '0.5';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 200);
         });
-    }
-
-    if (mathButton) {
-        mathButton.addEventListener('click', (event) => {
-            // event.preventDefault();
-            playSound(clickSound);
-            console.log("Math button clicked!");
-            // Actual navigation will happen via the href in HTML.
-        });
-    }
-
-    // --- Activity Protection ---
-    // Get all activity links and add click handlers to check login status
-    const activityLinks = document.querySelectorAll('.activity-card');
-    activityLinks.forEach(link => {
-        const originalHref = link.getAttribute('href');
-        if (originalHref) {
-            link.addEventListener('click', function(event) {
-                event.preventDefault();
-                if (requireLogin(originalHref)) {
-                    window.location.href = originalHref;
-                }
-            });
-        }
-    });
-
-    // --- Mascot Interaction ---
-    // Play welcome sound when mascot is visible (or after a short delay)
-    // You might want a more sophisticated trigger, e.g., after images load
-    setTimeout(() => {
-        playSound(welcomeSound);
-    }, 500); // Play after 0.5 seconds
-
-    // Example: Change speech bubble text on mascot hover (optional)
-    if (bennyMascot && speechBubble) {
-        bennyMascot.addEventListener('mouseenter', () => {
-            // speechBubble.textContent = "Let's pick a fun subject!";
-        });
-        bennyMascot.addEventListener('mouseleave', () => {
-            // speechBubble.textContent = "Hi! I'm Benny the Bunny! Ready to learn?";
-        });
-    }
-
-    // --- Helper function to play sound ---
-    function playSound(sound) {
-        if (sound && typeof sound.play === 'function') {
-            sound.currentTime = 0; // Rewind to start if already playing
-            sound.play().catch(error => console.error("Error playing sound:", error));
-        }
     }
 });
+
+// 设置语言函数
+function setLanguage(lang) {
+    // 更新 HTML lang 属性
+    document.documentElement.lang = lang;
+    
+    // 更新页面标题
+    document.title = translations[lang].title;
+    
+    // 更新问候语
+    const speechBubble = document.getElementById('speechBubble');
+    if (speechBubble) {
+        speechBubble.textContent = translations[lang].greeting;
+    }
+    
+    // 更新导航按钮文本
+    document.querySelector('#englishButton span').textContent = translations[lang].english;
+    document.querySelector('#mathButton span').textContent = translations[lang].math;
+    document.querySelector('#programmingButton span').textContent = translations[lang].programming;
+    document.querySelector('#profileButton span').textContent = translations[lang].profile;
+    
+    // 更新其他元素
+    document.querySelector('.parents-link').textContent = translations[lang].forParents;
+    document.querySelector('footer p').textContent = translations[lang].copyright;
+    
+    // 保存语言偏好到 localStorage
+    localStorage.setItem('preferredLanguage', lang);
+}
