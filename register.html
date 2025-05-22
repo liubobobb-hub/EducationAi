@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | LearnFun</title>
+    <title>Register | LearnFun</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        .login-container {
+        .register-container {
             max-width: 400px;
             margin: 30px auto;
             padding: 30px;
@@ -17,7 +17,7 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
-        .login-title {
+        .register-title {
             font-size: 1.8em;
             color: #007bff;
             margin-bottom: 20px;
@@ -50,7 +50,7 @@
             outline: none;
         }
         
-        .login-button {
+        .register-button {
             width: 100%;
             padding: 12px;
             background-color: #007bff;
@@ -63,21 +63,21 @@
             transition: background-color 0.3s;
         }
         
-        .login-button:hover {
+        .register-button:hover {
             background-color: #0056b3;
         }
         
-        .register-link {
+        .login-link {
             margin-top: 15px;
             text-align: center;
         }
         
-        .register-link a {
+        .login-link a {
             color: #007bff;
             text-decoration: none;
         }
         
-        .register-link a:hover {
+        .login-link a:hover {
             text-decoration: underline;
         }
         
@@ -105,28 +105,42 @@
             <div class="mascot-area">
                 <img src="images/benny_bunny_wave.png" alt="Benny the Bunny Waving" id="bennyMascot">
                 <div class="speech-bubble" id="speechBubble">
-                    Welcome back! Please log in to continue your learning adventure!
+                    Join the LearnFun adventure! Create your account to start learning!
                 </div>
             </div>
 
-            <div class="login-container">
-                <h2 class="login-title">Login to LearnFun</h2>
-                <form id="loginForm">
+            <div class="register-container">
+                <h2 class="register-title">Create Your Account</h2>
+                <form id="registerForm">
                     <div class="form-group">
                         <label for="username" class="form-label">Username</label>
                         <input type="text" id="username" name="username" class="form-input" required>
-                        <div class="error-message" id="usernameError">Please enter a valid username</div>
+                        <div class="error-message" id="usernameError">Please enter a valid username (3-20 characters)</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" name="email" class="form-input" required>
+                        <div class="error-message" id="emailError">Please enter a valid email address</div>
                     </div>
                     
                     <div class="form-group">
                         <label for="password" class="form-label">Password</label>
                         <input type="password" id="password" name="password" class="form-input" required>
-                        <div class="error-message" id="passwordError">Please enter your password</div>
+                        <div class="error-message" id="passwordError">Password must be at least 6 characters</div>
                     </div>
                     
-                    <button type="submit" class="login-button">Login</button>
+                    <div class="form-group">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" required>
+                        <div class="error-message" id="confirmPasswordError">Passwords do not match</div>
+                    </div>
                     
-                                        <div class="register-link">                        <p>Don't have an account? <a href="register.html">Register</a></p>                    </div>
+                    <button type="submit" class="register-button">Create Account</button>
+                    
+                    <div class="login-link">
+                        <p>Already have an account? <a href="login.html">Login</a></p>
+                    </div>
                 </form>
             </div>
         </main>
@@ -139,49 +153,82 @@
     <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
             const usernameInput = document.getElementById('username');
+            const emailInput = document.getElementById('email');
             const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
             const usernameError = document.getElementById('usernameError');
+            const emailError = document.getElementById('emailError');
             const passwordError = document.getElementById('passwordError');
+            const confirmPasswordError = document.getElementById('confirmPasswordError');
             
-            // Get return URL from query parameters (if any)
-            const urlParams = new URLSearchParams(window.location.search);
-            const returnUrl = urlParams.get('returnUrl') || 'index.html';
-            
-            loginForm.addEventListener('submit', (e) => {
+            registerForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 
                 // Reset error messages
                 usernameError.style.display = 'none';
+                emailError.style.display = 'none';
                 passwordError.style.display = 'none';
+                confirmPasswordError.style.display = 'none';
                 
                 let isValid = true;
                 
-                // Simple validation
-                if (!usernameInput.value.trim()) {
+                // Username validation
+                if (!usernameInput.value.trim() || usernameInput.value.trim().length < 3 || usernameInput.value.trim().length > 20) {
                     usernameError.style.display = 'block';
                     isValid = false;
                 }
                 
-                if (!passwordInput.value.trim()) {
+                // Email validation
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(emailInput.value.trim())) {
+                    emailError.style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Password validation
+                if (passwordInput.value.length < 6) {
                     passwordError.style.display = 'block';
                     isValid = false;
                 }
                 
+                // Confirm password validation
+                if (passwordInput.value !== confirmPasswordInput.value) {
+                    confirmPasswordError.style.display = 'block';
+                    isValid = false;
+                }
+                
                 if (isValid) {
-                    // For demo purposes, accept any login
-                    // In a real app, you would validate against a server
+                    // Store user information in localStorage
+                    // In a real app, you would send this to a server
+                    const users = JSON.parse(localStorage.getItem('users') || '[]');
                     
-                    // Store login state in localStorage
+                    // Check if username already exists
+                    if (users.some(user => user.username === usernameInput.value.trim())) {
+                        usernameError.textContent = 'Username already exists';
+                        usernameError.style.display = 'block';
+                        return;
+                    }
+                    
+                    // Add new user
+                    users.push({
+                        username: usernameInput.value.trim(),
+                        email: emailInput.value.trim(),
+                        password: passwordInput.value // In a real app, never store passwords in plain text
+                    });
+                    
+                    localStorage.setItem('users', JSON.stringify(users));
+                    
+                    // Set user as logged in
                     localStorage.setItem('isLoggedIn', 'true');
                     localStorage.setItem('username', usernameInput.value.trim());
                     
-                    // Redirect to the return URL or home page
-                    window.location.href = returnUrl;
+                    // Redirect to homepage
+                    window.location.href = 'index.html';
                 }
             });
         });
     </script>
 </body>
-</html> 
+</html>
