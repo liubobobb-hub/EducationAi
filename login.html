@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | LearnFun</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border: 3px solid #007bff;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .login-title {
+            font-size: 1.8em;
+            color: #007bff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1em;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .login-button:hover {
+            background-color: #0056b3;
+        }
+        
+        .register-link {
+            margin-top: 15px;
+            text-align: center;
+        }
+        
+        .register-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            color: #f44336;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header>
+            <a href="index.html" class="logo-link">
+                <div class="logo">
+                    <img src="images/benny_bunny_head.png" alt="Benny Bunny Icon" class="logo-bunny-head">
+                    <h1>LearnFun</h1>
+                </div>
+            </a>
+            <a href="#" class="parents-link">For Parents</a>
+        </header>
+
+        <main>
+            <div class="mascot-area">
+                <img src="images/benny_bunny_wave.png" alt="Benny the Bunny Waving" id="bennyMascot">
+                <div class="speech-bubble" id="speechBubble">
+                    Welcome back! Please log in to continue your learning adventure!
+                </div>
+            </div>
+
+            <div class="login-container">
+                <h2 class="login-title">Login to LearnFun</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" id="username" name="username" class="form-input" required>
+                        <div class="error-message" id="usernameError">Please enter a valid username</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" id="password" name="password" class="form-input" required>
+                        <div class="error-message" id="passwordError">Please enter your password</div>
+                    </div>
+                    
+                    <button type="submit" class="login-button">Login</button>
+                    
+                    <div class="register-link">
+                        <p>Don't have an account? <a href="#">Register</a></p>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2023 Your LearnFun Site</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('loginForm');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const usernameError = document.getElementById('usernameError');
+            const passwordError = document.getElementById('passwordError');
+            
+            // Get return URL from query parameters (if any)
+            const urlParams = new URLSearchParams(window.location.search);
+            const returnUrl = urlParams.get('returnUrl') || 'index.html';
+            
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Reset error messages
+                usernameError.style.display = 'none';
+                passwordError.style.display = 'none';
+                
+                let isValid = true;
+                
+                // Simple validation
+                if (!usernameInput.value.trim()) {
+                    usernameError.style.display = 'block';
+                    isValid = false;
+                }
+                
+                if (!passwordInput.value.trim()) {
+                    passwordError.style.display = 'block';
+                    isValid = false;
+                }
+                
+                if (isValid) {
+                    // For demo purposes, accept any login
+                    // In a real app, you would validate against a server
+                    
+                    // Store login state in localStorage
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('username', usernameInput.value.trim());
+                    
+                    // Redirect to the return URL or home page
+                    window.location.href = returnUrl;
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

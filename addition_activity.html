@@ -32,7 +32,7 @@
         }
         
         .answer-input {
-            width: 80px;
+            width: 120px;
             height: 60px;
             font-size: 1.5em;
             text-align: center;
@@ -76,6 +76,14 @@
         
         .incorrect {
             color: #F44336;
+        }
+        
+        .score-display {
+            text-align: center;
+            font-size: 1.2em;
+            margin: 15px 0;
+            color: #2196F3;
+            font-weight: bold;
         }
         
         .controls {
@@ -130,6 +138,7 @@
                 </div>
                 
                 <div class="feedback" id="feedback"></div>
+                <div class="score-display" id="scoreDisplay">Score: 0/0</div>
                 
                 <div class="controls">
                     <button class="check-button" id="checkButton">Check Answer</button>
@@ -149,14 +158,24 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Check if user is logged in
+            if (localStorage.getItem('isLoggedIn') !== 'true') {
+                // Redirect to login page
+                window.location.href = `login.html?returnUrl=${encodeURIComponent(window.location.href)}`;
+                return;
+            }
+            
             const number1Element = document.getElementById('number1');
             const number2Element = document.getElementById('number2');
             const answerInput = document.getElementById('answerInput');
             const feedbackElement = document.getElementById('feedback');
+            const scoreDisplay = document.getElementById('scoreDisplay');
             const checkButton = document.getElementById('checkButton');
             const nextButton = document.getElementById('nextButton');
             
             let correctAnswer = 0;
+            let score = 0;
+            let totalAttempts = 0;
             
             // Generate a new addition problem
             function generateProblem() {
@@ -191,6 +210,9 @@
                 if (userAnswer === correctAnswer) {
                     feedbackElement.textContent = 'Correct! Great job!';
                     feedbackElement.className = 'feedback correct';
+                    score++;
+                    totalAttempts++;
+                    updateScoreDisplay();
                     
                     // Play success sound
                     try {
@@ -202,6 +224,8 @@
                 } else {
                     feedbackElement.textContent = `Try again! ${number1Element.textContent} + ${number2Element.textContent} = ${correctAnswer}`;
                     feedbackElement.className = 'feedback incorrect';
+                    totalAttempts++;
+                    updateScoreDisplay();
                     
                     // Play incorrect sound
                     try {
@@ -211,6 +235,11 @@
                         console.warn('Incorrect sound file not found.');
                     }
                 }
+            }
+            
+            // Update the score display
+            function updateScoreDisplay() {
+                scoreDisplay.textContent = `Score: ${score}/${totalAttempts}`;
             }
             
             // Add event listeners

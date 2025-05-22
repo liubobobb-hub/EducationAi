@@ -18,6 +18,70 @@ document.addEventListener('DOMContentLoaded', () => {
         welcomeSound = { play: () => {} };
     }
 
+    // --- Authentication Functions ---
+    function isLoggedIn() {
+        return localStorage.getItem('isLoggedIn') === 'true';
+    }
+
+    function getUsername() {
+        return localStorage.getItem('username') || 'Friend';
+    }
+
+    function requireLogin(targetUrl) {
+        if (!isLoggedIn()) {
+            // Redirect to login page with return URL
+            window.location.href = `login.html?returnUrl=${encodeURIComponent(targetUrl)}`;
+            return false;
+        }
+        return true;
+    }
+
+    function logout() {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('username');
+        window.location.href = 'index.html';
+    }
+
+    // --- Update UI based on login state ---
+    function updateUIForAuthState() {
+        // Update speech bubble with personalized greeting if logged in
+        if (speechBubble) {
+            if (isLoggedIn()) {
+                speechBubble.textContent = `Hi ${getUsername()}! Ready to continue learning?`;
+            }
+        }
+
+        // Add login/logout link to header if not already present
+        const header = document.querySelector('header');
+        if (header) {
+            // Check if auth link already exists
+            let authLink = document.getElementById('authLink');
+            
+            if (!authLink) {
+                authLink = document.createElement('a');
+                authLink.id = 'authLink';
+                authLink.style.marginLeft = '10px';
+                authLink.className = 'parents-link';
+                header.appendChild(authLink);
+            }
+            
+            if (isLoggedIn()) {
+                authLink.textContent = 'Logout';
+                authLink.href = '#';
+                authLink.onclick = (e) => {
+                    e.preventDefault();
+                    logout();
+                };
+            } else {
+                authLink.textContent = 'Login';
+                authLink.href = 'login.html';
+                authLink.onclick = null;
+            }
+        }
+    }
+
+    // Call this function on page load
+    updateUIForAuthState();
 
     // --- Event Listeners for Buttons ---
     if (englishButton) {
@@ -39,6 +103,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- Activity Protection ---
+    // Get all activity links and add click handlers to check login status
+    const activityLinks = document.querySelectorAll('.activity-card');
+    activityLinks.forEach(link => {
+        const originalHref = link.getAttribute('href');
+        if (originalHref) {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                if (requireLogin(originalHref)) {
+                    window.location.href = originalHref;
+                }
+            });
+        }
+    });
+
     // --- Mascot Interaction ---
     // Play welcome sound when mascot is visible (or after a short delay)
     // You might want a more sophisticated trigger, e.g., after images load
@@ -56,7 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-
     // --- Helper function to play sound ---
     function playSound(sound) {
         if (sound && typeof sound.play === 'function') {
@@ -64,5 +142,4 @@ document.addEventListener('DOMContentLoaded', () => {
             sound.play().catch(error => console.error("Error playing sound:", error));
         }
     }
-
 });

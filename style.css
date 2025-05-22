@@ -61,6 +61,12 @@ header {
     color: #007bff; /* Bright Blue */
 }
 
+.logo-link {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
 .parents-link {
     font-size: 0.9em;
     color: #555;
@@ -172,6 +178,10 @@ header {
 
 .math-button {
     background-color: #4CAF50; /* Grass Green */
+}
+
+.profile-button {
+    background-color: #2196F3; /* Blue */
 }
 
 /* Footer Styles */

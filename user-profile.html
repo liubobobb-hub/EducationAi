@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | LearnFun</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .profile-container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border: 3px solid #4CAF50;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #E3F2FD;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            color: #1976D2;
+            font-weight: bold;
+            margin-right: 20px;
+            border: 3px solid #1976D2;
+        }
+        
+        .profile-info h2 {
+            font-size: 1.8em;
+            color: #1976D2;
+            margin-bottom: 5px;
+        }
+        
+        .profile-info p {
+            color: #757575;
+            font-size: 1.1em;
+        }
+        
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background-color: #F5F5F5;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #757575;
+            font-size: 0.9em;
+        }
+        
+        .recent-activities {
+            margin-top: 30px;
+        }
+        
+        .recent-activities h3 {
+            font-size: 1.4em;
+            color: #1976D2;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px dashed #E0E0E0;
+        }
+        
+        .activity-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #E0E0E0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .activity-icon {
+            width: 30px;
+            height: 30px;
+            background-color: #E8F5E9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .activity-details {
+            flex-grow: 1;
+        }
+        
+        .activity-name {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .activity-time {
+            font-size: 0.8em;
+            color: #757575;
+        }
+        
+        .activity-score {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header>
+            <a href="index.html" class="logo-link">
+                <div class="logo">
+                    <img src="images/benny_bunny_head.png" alt="Benny Bunny Icon" class="logo-bunny-head">
+                    <h1>LearnFun</h1>
+                </div>
+            </a>
+            <a href="#" class="parents-link">For Parents</a>
+        </header>
+
+        <main>
+            <div class="subject-header">
+                <img src="images/benny_bunny_wave.png" alt="Benny the Bunny Waving" class="subject-mascot">
+                <div class="subject-title">
+                    <h2>My Profile</h2>
+                    <p>Keep track of your learning adventure!</p>
+                </div>
+            </div>
+
+            <div class="profile-container">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="profileAvatar">A</div>
+                    <div class="profile-info">
+                        <h2 id="profileName">Username</h2>
+                        <p>Learning Explorer</p>
+                    </div>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Activities Completed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">85%</div>
+                        <div class="stat-label">Average Score</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Learning Streaks</div>
+                    </div>
+                </div>
+                
+                <div class="recent-activities">
+                    <h3>Recent Activities</h3>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">M</div>
+                        <div class="activity-details">
+                            <div class="activity-name">Addition Practice</div>
+                            <div class="activity-time">Today, 10:15 AM</div>
+                        </div>
+                        <div class="activity-score">8/10</div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">E</div>
+                        <div class="activity-details">
+                            <div class="activity-name">Alphabet Tracing</div>
+                            <div class="activity-time">Yesterday, 3:30 PM</div>
+                        </div>
+                        <div class="activity-score">Perfect!</div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">M</div>
+                        <div class="activity-details">
+                            <div class="activity-name">Counting Game</div>
+                            <div class="activity-time">3 days ago</div>
+                        </div>
+                        <div class="activity-score">9/10</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="index.html" class="back-button">Back to Home</a>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2023 Your LearnFun Site</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if user is logged in
+            if (localStorage.getItem('isLoggedIn') !== 'true') {
+                // Redirect to login page
+                window.location.href = `login.html?returnUrl=${encodeURIComponent(window.location.href)}`;
+                return;
+            }
+            
+            // Update profile with user information
+            const username = localStorage.getItem('username') || 'Friend';
+            const profileName = document.getElementById('profileName');
+            const profileAvatar = document.getElementById('profileAvatar');
+            
+            if (profileName) {
+                profileName.textContent = username;
+            }
+            
+            if (profileAvatar && username) {
+                profileAvatar.textContent = username.charAt(0).toUpperCase();
+            }
+        });
+    </script>
+</body>
+</html> 
