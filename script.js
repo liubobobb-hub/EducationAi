@@ -212,15 +212,32 @@ function setLanguage(lang) {
     }
     
     // 更新导航按钮文本
-    document.querySelector('#englishButton span').textContent = translations[lang].english;
-    document.querySelector('#mathButton span').textContent = translations[lang].math;
-    document.querySelector('#programmingButton span').textContent = translations[lang].programming;
-    document.querySelector('#profileButton span').textContent = translations[lang].profile;
+    const englishButton = document.querySelector('#englishButton span');
+    if (englishButton) {
+        englishButton.textContent = translations[lang].english;
+    }
+
+    const mathButton = document.querySelector('#mathButton span');
+    if (mathButton) {
+        mathButton.textContent = translations[lang].math;
+    }
+
+    const programmingButton = document.querySelector('#programmingButton span');
+    if (programmingButton) {
+        programmingButton.textContent = translations[lang].programming;
+    }
+
+    const profileButton = document.querySelector('#profileButton span');
+    if (profileButton) {
+        profileButton.textContent = translations[lang].profile;
+    }
     
     // 更新其他元素
-    document.querySelector('.parents-link').textContent = translations[lang].forParents;
-    document.querySelector('footer p').textContent = translations[lang].copyright;
-    
-    // 保存语言偏好到 localStorage
+    const parentsLink = document.querySelector('.parents-link');
+    if (parentsLink) {
+        parentsLink.textContent = translations[lang].forParents;
+    }
+
+    // Save the language preference
     localStorage.setItem('preferredLanguage', lang);
 }
