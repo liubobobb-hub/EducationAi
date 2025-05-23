@@ -132,7 +132,7 @@ header {
 }
 
 
-/* Navigation Buttons */.navigation-buttons {    display: grid;    grid-template-columns: repeat(2, 1fr); /* 2 columns */    grid-template-rows: repeat(2, 1fr); /* 2 rows */    gap: 20px; /* Space between buttons */    max-width: 500px;    margin: 0 auto;}.nav-button {    padding: 25px 30px; /* Large padding for bigger tap targets */    border-radius: 20px; /* Very rounded corners */    text-decoration: none;    font-size: 1.8em; /* Large text */    font-weight: bold;    color: white;    display: flex;    flex-direction: column; /* Icon above text */    align-items: center;    justify-content: center;    min-height: 150px;    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;    box-shadow: 0 5px 10px rgba(0,0,0,0.15);}.nav-button:hover {    transform: translateY(-5px) scale(1.05); /* Slight lift and grow effect */    box-shadow: 0 8px 15px rgba(0,0,0,0.2);}.nav-button:active {    transform: translateY(-2px) scale(1.02); /* Slight press effect */    box-shadow: 0 3px 7px rgba(0,0,0,0.1);}.button-icon {    width: 60px; /* Adjust icon size */    height: auto;    margin-bottom: 10px;}.english-button {    background-color: #FFC107; /* Sunny Yellow */}.math-button {    background-color: #4CAF50; /* Grass Green */}.programming-button {    background-color: #9C27B0; /* Purple */}.profile-button {    background-color: #2196F3; /* Blue */}
+/* Navigation Buttons */.navigation-buttons {    display: grid;    grid-template-columns: repeat(2, 1fr); /* 2 columns */    grid-template-rows: repeat(2, 1fr); /* 2 rows */    gap: 20px; /* Space between buttons */    max-width: 500px;    margin: 0 auto;}.nav-button {    padding: 25px 30px; /* Large padding for bigger tap targets */    border-radius: 20px; /* Very rounded corners */    text-decoration: none;    font-size: 1.8em; /* Large text */    font-weight: bold;    color: white;    display: flex;    flex-direction: column; /* Icon above text */    align-items: center;    justify-content: center;    min-height: 150px;    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;    box-shadow: 0 5px 10px rgba(0,0,0,0.15);}.nav-button:hover {    transform: translateY(-5px) scale(1.05); /* Slight lift and grow effect */    box-shadow: 0 8px 15px rgba(0,0,0,0.2);}.nav-button:active {    transform: translateY(-2px) scale(1.02); /* Slight press effect */    box-shadow: 0 3px 7px rgba(0,0,0,0.1);}.button-icon {    width: 60px; /* Adjust icon size */    height: auto;    margin-bottom: 10px;}.english-button {    background-color: #FFC107; /* Sunny Yellow */}.math-button {    background-color: #4CAF50; /* Grass Green */}.poetry-button {    background-color: #D32F2F; /* Chinese Red */}.programming-button {    background-color: #9C27B0; /* Purple */}.profile-button {    background-color: #2196F3; /* Blue */}
 
 /* Footer Styles */
 footer {
@@ -144,7 +144,45 @@ footer {
 }
 
 /* Basic Responsiveness for smaller screens */
-@media (max-width: 600px) {    .logo h1 {        font-size: 2em;    }    .navigation-buttons {        grid-template-columns: 1fr; /* Stack buttons vertically on very small screens */        grid-template-rows: repeat(4, 1fr);        gap: 15px;    }    .nav-button {        font-size: 1.5em;        padding: 20px;    }    #bennyMascot {        max-width: 120px;    }    .speech-bubble {        font-size: 1em;    }}
+@media (max-width: 600px) {
+    .logo h1 {
+        font-size: 2em;
+    }
+    .navigation-buttons {
+        grid-template-columns: repeat(2, 1fr); /* Keep 2x2 grid even on small screens */
+        grid-template-rows: repeat(2, 1fr);
+        gap: 15px;
+        max-width: 400px; /* Smaller max width for small screens */
+    }
+    .nav-button {
+        font-size: 1.4em;
+        padding: 20px 15px;
+        min-height: 120px; /* Smaller height on mobile */
+    }
+    .button-icon {
+        width: 45px; /* Smaller icons on mobile */
+    }
+    #bennyMascot {
+        max-width: 120px;
+    }
+    .speech-bubble {
+        font-size: 1em;
+    }
+}
+
+/* Only go to single column on very small screens */
+@media (max-width: 400px) {
+    .navigation-buttons {
+        grid-template-columns: 1fr; /* Single column only on very small screens */
+        grid-template-rows: repeat(4, 1fr);
+        gap: 15px;
+    }
+    .nav-button {
+        font-size: 1.3em;
+        padding: 18px;
+        min-height: 100px;
+    }
+}
 
 /* Add to your style.css */
 
@@ -216,7 +254,21 @@ footer {
 .activity-card.math-theme {
     background-color: var(--accent-color-math);
 }
-.activity-card.math-theme:hover {    background-color: #6cc018; /* Darker shade of green on hover */}.activity-card.programming-theme {    background-color: #9C27B0; /* Purple to match the navigation button */}.activity-card.programming-theme:hover {    background-color: #7B1FA2; /* Darker shade of purple on hover */}
+.activity-card.math-theme:hover {
+    background-color: #6cc018; /* Darker shade of green on hover */
+}
+.activity-card.poetry-theme {
+    background-color: #D32F2F; /* Chinese Red to match the navigation button */
+}
+.activity-card.poetry-theme:hover {
+    background-color: #B71C1C; /* Darker shade of red on hover */
+}
+.activity-card.programming-theme {
+    background-color: #9C27B0; /* Purple to match the navigation button */
+}
+.activity-card.programming-theme:hover {
+    background-color: #7B1FA2; /* Darker shade of purple on hover */
+}
 
 .activity-icon {
     width: 60px; /* Adjust size as needed */
@@ -321,13 +373,28 @@ img[src*="icon_placeholder_"] {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .language-selector {
-        width: 90px;
+    .header-right {
+        gap: 10px;
     }
-
+    .language-selector {
+        width: 80px;
+    }
     .language-dropdown {
-        font-size: 13px;
-        padding: 6px 25px 6px 10px;
+        font-size: 12px;
+        padding: 6px 24px 6px 8px;
+    }
+    .profile-link {
+        font-size: 0.8em;
+        padding: 6px 8px;
+        gap: 6px;
+    }
+    .profile-icon {
+        width: 16px;
+        height: 16px;
+    }
+    .parents-link {
+        font-size: 0.8em;
+        padding: 6px 8px;
     }
 }
 
@@ -335,4 +402,28 @@ img[src*="icon_placeholder_"] {
 .language-toggle,
 .current-lang {
     display: none;
+}
+
+/* Header profile link styles */
+.profile-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #333;
+    background-color: #f0f0f0;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+}
+
+.profile-link:hover {
+    background-color: #e0e0e0;
+}
+
+.profile-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
 }

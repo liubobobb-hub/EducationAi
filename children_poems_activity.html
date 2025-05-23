@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>儿童诗歌 - LearnFun</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .poetry-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .children-card {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+        
+        .children-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .children-title {
+            font-size: 32px;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .children-author {
+            text-align: center;
+            color: #34495e;
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .children-content {
+            font-size: 22px;
+            line-height: 2.5;
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-family: 'Nunito', '微软雅黑', sans-serif;
+            font-weight: 500;
+        }
+        
+        .children-illustration {
+            text-align: center;
+            font-size: 40px;
+            margin: 20px 0;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .children-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: #2c3e50;
+            border: none;
+            padding: 15px 28px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 154, 158, 0.4);
+        }
+        
+        .audio-btn {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+        
+        .practice-btn {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+        
+        .sing-btn {
+            background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .practice-section {
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid #ff9a9e;
+        }
+        
+        .memory-game {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .word-card {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .word-card:hover {
+            transform: scale(1.05);
+            border-color: #e74c3c;
+        }
+        
+        .word-card.selected {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            border-color: #0984e3;
+        }
+        
+        .word-card.correct {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            border-color: #00b894;
+        }
+        
+        .poem-line {
+            font-size: 20px;
+            margin: 10px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            text-align: center;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #ddd;
+        }
+        
+        .poem-line.filled {
+            background: linear-gradient(135deg, #d1f2eb 0%, #a3e4d7 100%);
+            border-color: #00b894;
+        }
+        
+        .result-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .correct {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        
+        .theme-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header>
+            <a href="index.html" class="logo-link">
+                <div class="logo">
+                    <img src="images/benny_bunny_head.png" alt="Benny Bunny Icon" class="logo-bunny-head">
+                    <h1>LearnFun</h1>
+                </div>
+            </a>
+            <div class="header-right">
+                <div class="language-selector">
+                    <select id="languageSelect" class="language-dropdown">
+                        <option value="zh">中文</option>
+                        <option value="en">English</option>
+                    </select>
+                    <div class="select-arrow"></div>
+                </div>
+                <a href="user-profile.html" class="profile-link">
+                    <img src="images/benny_bunny_head.png" alt="Profile" class="profile-icon">
+                    <span>我的档案</span>
+                </a>
+                <a href="#" class="parents-link">For Parents</a>
+            </div>
+        </header>
+
+        <main>
+            <div class="subject-header">
+                <img src="images/benny_bunny_wave.png" alt="Benny the Bunny Waving" class="subject-mascot">
+                <div class="subject-title">
+                    <h2>儿童诗歌</h2>
+                    <p>和小兔子本尼一起读儿歌，学诗歌，开心快乐每一天！</p>
+                    <a href="poetry.html" class="back-button">← 返回古诗词</a>
+                </div>
+            </div>
+
+            <div class="poetry-container">
+                <!-- 小星星 -->
+                <div class="children-card">
+                    <span class="theme-tag">⭐ 自然之歌</span>
+                    <h3 class="children-title">小星星</h3>
+                    <p class="children-author">儿童歌谣</p>
+                    <div class="children-illustration">⭐✨🌟</div>
+                    <div class="children-content">
+                        一闪一闪亮晶晶，<br>
+                        满天都是小星星。<br>
+                        挂在天空放光明，<br>
+                        好像许多小眼睛。<br>
+                        一闪一闪亮晶晶，<br>
+                        满天都是小星星。
+                    </div>
+                    <div class="children-actions">
+                        <button class="action-btn audio-btn" onclick="playChildren('xiaoxingxing')">🔊 朗读</button>
+                        <button class="action-btn sing-btn" onclick="singChildren('xiaoxingxing')">🎵 唱歌</button>
+                        <button class="action-btn practice-btn" onclick="togglePractice('xiaoxingxing')">🎮 游戏</button>
+                    </div>
+                    <div id="xiaoxingxing-practice" class="practice-section hidden">
+                        <h4>🧩 诗句拼图游戏</h4>
+                        <p>请将下面的词语拖到正确的位置，完成这首诗！</p>
+                        <div class="memory-game">
+                            <div class="word-card" onclick="selectWord(this, '一闪一闪')">一闪一闪</div>
+                            <div class="word-card" onclick="selectWord(this, '亮晶晶')">亮晶晶</div>
+                            <div class="word-card" onclick="selectWord(this, '满天都是')">满天都是</div>
+                            <div class="word-card" onclick="selectWord(this, '小星星')">小星星</div>
+                            <div class="word-card" onclick="selectWord(this, '挂在天空')">挂在天空</div>
+                            <div class="word-card" onclick="selectWord(this, '放光明')">放光明</div>
+                        </div>
+                        <div class="poem-lines">
+                            <div class="poem-line" data-answer="一闪一闪" onclick="fillLine(this)">点击填入第一个词</div>
+                            <div class="poem-line" data-answer="亮晶晶" onclick="fillLine(this)">点击填入第二个词</div>
+                            <div class="poem-line" data-answer="满天都是" onclick="fillLine(this)">点击填入第三个词</div>
+                            <div class="poem-line" data-answer="小星星" onclick="fillLine(this)">点击填入第四个词</div>
+                        </div>
+                        <button class="action-btn" onclick="checkPoem('xiaoxingxing')">检查答案 🎯</button>
+                        <div id="xiaoxingxing-result" class="result-message hidden"></div>
+                    </div>
+                </div>
+
+                <!-- 春天在哪里 -->
+                <div class="children-card">
+                    <span class="theme-tag">🌸 春天之歌</span>
+                    <h3 class="children-title">春天在哪里</h3>
+                    <p class="children-author">儿童歌谣</p>
+                    <div class="children-illustration">🌸🌿🦋</div>
+                    <div class="children-content">
+                        春天在哪里呀，<br>
+                        春天在哪里，<br>
+                        春天在那青翠的山林里。<br>
+                        这里有红花呀，<br>
+                        这里有绿草，<br>
+                        还有那会唱歌的小黄鹂。
+                    </div>
+                    <div class="children-actions">
+                        <button class="action-btn audio-btn" onclick="playChildren('chuntianzainali')">🔊 朗读</button>
+                        <button class="action-btn sing-btn" onclick="singChildren('chuntianzainali')">🎵 唱歌</button>
+                        <button class="action-btn practice-btn" onclick="togglePractice('chuntianzainali')">🎮 游戏</button>
+                    </div>
+                    <div id="chuntianzainali-practice" class="practice-section hidden">
+                        <h4>🎨 找找春天的朋友</h4>
+                        <p>在诗歌中，春天有哪些朋友呢？点击找到它们！</p>
+                        <div class="memory-game">
+                            <div class="word-card" onclick="selectSpringFriend(this, true)">🌸 红花</div>
+                            <div class="word-card" onclick="selectSpringFriend(this, true)">🌿 绿草</div>
+                            <div class="word-card" onclick="selectSpringFriend(this, true)">🐦 小黄鹂</div>
+                            <div class="word-card" onclick="selectSpringFriend(this, false)">❄️ 雪花</div>
+                            <div class="word-card" onclick="selectSpringFriend(this, false)">🍂 落叶</div>
+                            <div class="word-card" onclick="selectSpringFriend(this, true)">🏔️ 山林</div>
+                        </div>
+                        <div id="chuntianzainali-result" class="result-message hidden"></div>
+                    </div>
+                </div>
+
+                <!-- 数鸭子 -->
+                <div class="children-card">
+                    <span class="theme-tag">🦆 数字之歌</span>
+                    <h3 class="children-title">数鸭子</h3>
+                    <p class="children-author">儿童歌谣</p>
+                    <div class="children-illustration">🦆🦆🦆</div>
+                    <div class="children-content">
+                        门前大桥下，<br>
+                        游过一群鸭。<br>
+                        快来快来数一数，<br>
+                        二四六七八。<br>
+                        嘎嘎嘎嘎真呀真多呀，<br>
+                        数不清到底多少鸭。
+                    </div>
+                    <div class="children-actions">
+                        <button class="action-btn audio-btn" onclick="playChildren('shuyazi')">🔊 朗读</button>
+                        <button class="action-btn sing-btn" onclick="singChildren('shuyazi')">🎵 唱歌</button>
+                        <button class="action-btn practice-btn" onclick="togglePractice('shuyazi')">🎮 游戏</button>
+                    </div>
+                    <div id="shuyazi-practice" class="practice-section hidden">
+                        <h4>🦆 数鸭子小游戏</h4>
+                        <p>快来帮小兔子本尼数一数有多少只鸭子吧！</p>
+                        <div style="text-align: center; font-size: 30px; margin: 20px 0;">
+                            🦆🦆🦆🦆🦆🦆
+                        </div>
+                        <div style="text-align: center;">
+                            <input type="number" id="duck-count" style="font-size: 20px; padding: 10px; width: 100px; text-align: center; border: 2px solid #ff9a9e; border-radius: 10px;" placeholder="?">
+                            <button class="action-btn" onclick="checkDuckCount()" style="margin-left: 10px;">数好了! 🎯</button>
+                        </div>
+                        <div id="shuyazi-result" class="result-message hidden"></div>
+                    </div>
+                </div>
+
+                <!-- 小兔子乖乖 -->
+                <div class="children-card">
+                    <span class="theme-tag">🐰 安全之歌</span>
+                    <h3 class="children-title">小兔子乖乖</h3>
+                    <p class="children-author">儿童歌谣</p>
+                    <div class="children-illustration">🐰🏠🚪</div>
+                    <div class="children-content">
+                        小兔子乖乖，<br>
+                        把门儿开开，<br>
+                        快点儿开开，<br>
+                        我要进来。<br>
+                        不开不开我不开，<br>
+                        妈妈没回来，<br>
+                        谁来也不开。
+                    </div>
+                    <div class="children-actions">
+                        <button class="action-btn audio-btn" onclick="playChildren('xiaotuziguaiguai')">🔊 朗读</button>
+                        <button class="action-btn sing-btn" onclick="singChildren('xiaotuziguaiguai')">🎵 唱歌</button>
+                        <button class="action-btn practice-btn" onclick="togglePractice('xiaotuziguaiguai')">🎮 游戏</button>
+                    </div>
+                    <div id="xiaotuziguaiguai-practice" class="practice-section hidden">
+                        <h4>🔐 安全知识小测试</h4>
+                        <p>小兔子为什么不开门呢？选择正确的答案：</p>
+                        <div class="memory-game">
+                            <div class="word-card" onclick="selectSafety(this, false)">因为懒得开门</div>
+                            <div class="word-card" onclick="selectSafety(this, true)">因为妈妈还没回来</div>
+                            <div class="word-card" onclick="selectSafety(this, false)">因为不想见客人</div>
+                            <div class="word-card" onclick="selectSafety(this, true)">为了保护自己安全</div>
+                        </div>
+                        <div id="xiaotuziguaiguai-result" class="result-message hidden"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2023 Your LearnFun Site</p>
+        </footer>
+    </div>
+
+    <script>
+        let selectedWord = null;
+        let springFriendsCount = 0;
+        let safetyAnswers = 0;
+
+        function playChildren(songId) {
+            const utterance = new SpeechSynthesisUtterance();
+            utterance.lang = 'zh-CN';
+            
+            const songs = {
+                'xiaoxingxing': '一闪一闪亮晶晶，满天都是小星星。挂在天空放光明，好像许多小眼睛。一闪一闪亮晶晶，满天都是小星星。',
+                'chuntianzainali': '春天在哪里呀，春天在哪里，春天在那青翠的山林里。这里有红花呀，这里有绿草，还有那会唱歌的小黄鹂。',
+                'shuyazi': '门前大桥下，游过一群鸭。快来快来数一数，二四六七八。嘎嘎嘎嘎真呀真多呀，数不清到底多少鸭。',
+                'xiaotuziguaiguai': '小兔子乖乖，把门儿开开，快点儿开开，我要进来。不开不开我不开，妈妈没回来，谁来也不开。'
+            };
+            
+            utterance.text = songs[songId];
+            utterance.rate = 0.8;
+            speechSynthesis.speak(utterance);
+        }
+
+        function singChildren(songId) {
+            // 播放音乐版本（这里用朗读模拟）
+            const utterance = new SpeechSynthesisUtterance();
+            utterance.lang = 'zh-CN';
+            utterance.rate = 0.6; // 更慢，更像唱歌
+            utterance.pitch = 1.2; // 更高的音调
+            
+            const songs = {
+                'xiaoxingxing': '一闪一闪亮晶晶，满天都是小星星。挂在天空放光明，好像许多小眼睛。',
+                'chuntianzainali': '春天在哪里呀，春天在哪里，春天在那青翠的山林里。',
+                'shuyazi': '门前大桥下，游过一群鸭。快来快来数一数，二四六七八。',
+                'xiaotuziguaiguai': '小兔子乖乖，把门儿开开，快点儿开开，我要进来。'
+            };
+            
+            utterance.text = songs[songId];
+            speechSynthesis.speak(utterance);
+        }
+
+        function togglePractice(songId) {
+            const practice = document.getElementById(songId + '-practice');
+            practice.classList.toggle('hidden');
+            
+            // 重置游戏状态
+            if (!practice.classList.contains('hidden')) {
+                resetGame(songId);
+            }
+        }
+
+        function resetGame(songId) {
+            selectedWord = null;
+            springFriendsCount = 0;
+            safetyAnswers = 0;
+            
+            // 重置所有卡片状态
+            const cards = document.querySelectorAll(`#${songId}-practice .word-card`);
+            cards.forEach(card => {
+                card.classList.remove('selected', 'correct');
+            });
+            
+            // 重置诗句行
+            const lines = document.querySelectorAll(`#${songId}-practice .poem-line`);
+            lines.forEach(line => {
+                line.classList.remove('filled');
+                line.textContent = line.getAttribute('data-original') || line.textContent;
+            });
+            
+            // 隐藏结果
+            const result = document.getElementById(songId + '-result');
+            if (result) result.classList.add('hidden');
+        }
+
+        function selectWord(element, word) {
+            // 清除之前的选择
+            document.querySelectorAll('.word-card.selected').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // 选择当前词语
+            element.classList.add('selected');
+            selectedWord = word;
+        }
+
+        function fillLine(lineElement) {
+            if (!selectedWord) {
+                alert('请先选择一个词语！');
+                return;
+            }
+            
+            const expectedWord = lineElement.getAttribute('data-answer');
+            lineElement.textContent = selectedWord;
+            lineElement.classList.add('filled');
+            
+            // 标记对应的词语卡片
+            const selectedCard = document.querySelector('.word-card.selected');
+            if (selectedCard) {
+                selectedCard.classList.add('correct');
+                selectedCard.classList.remove('selected');
+            }
+            
+            selectedWord = null;
+        }
+
+        function checkPoem(poemId) {
+            const lines = document.querySelectorAll(`#${poemId}-practice .poem-line`);
+            let correct = 0;
+            let total = lines.length;
+            
+            lines.forEach(line => {
+                const expected = line.getAttribute('data-answer');
+                const actual = line.textContent.trim();
+                if (expected === actual) {
+                    correct++;
+                }
+            });
+            
+            const resultDiv = document.getElementById(poemId + '-result');
+            resultDiv.classList.remove('hidden');
+            
+            if (correct === total) {
+                resultDiv.className = 'result-message correct';
+                resultDiv.innerHTML = '🎉 太棒了！诗句排列完全正确！小兔子本尼为你鼓掌！👏';
+            } else {
+                resultDiv.className = 'result-message incorrect';
+                resultDiv.innerHTML = `还差一点点哦！答对了 ${correct}/${total} 个，再试试看吧！💪`;
+            }
+        }
+
+        function selectSpringFriend(element, isCorrect) {
+            element.classList.toggle('selected');
+            
+            if (isCorrect && element.classList.contains('selected')) {
+                springFriendsCount++;
+                element.classList.add('correct');
+            } else if (isCorrect && !element.classList.contains('selected')) {
+                springFriendsCount--;
+                element.classList.remove('correct');
+            } else if (!isCorrect && element.classList.contains('selected')) {
+                element.style.background = 'linear-gradient(135deg, #fab1a0 0%, #e17055 100%)';
+                setTimeout(() => {
+                    element.classList.remove('selected');
+                    element.style.background = '';
+                }, 1000);
+                return;
+            }
+            
+            const resultDiv = document.getElementById('chuntianzainali-result');
+            if (springFriendsCount === 4) {
+                resultDiv.classList.remove('hidden');
+                resultDiv.className = 'result-message correct';
+                resultDiv.innerHTML = '🌸 太棒了！你找到了春天的所有朋友：红花、绿草、小黄鹂和山林！';
+            } else {
+                resultDiv.classList.add('hidden');
+            }
+        }
+
+        function checkDuckCount() {
+            const count = parseInt(document.getElementById('duck-count').value);
+            const resultDiv = document.getElementById('shuyazi-result');
+            resultDiv.classList.remove('hidden');
+            
+            if (count === 6) {
+                resultDiv.className = 'result-message correct';
+                resultDiv.innerHTML = '🦆 太棒了！正确答案是6只鸭子！你的数学真好！';
+            } else {
+                resultDiv.className = 'result-message incorrect';
+                resultDiv.innerHTML = `🤔 再仔细数一数吧！提示：仔细看看有几只鸭子的表情符号哦！`;
+            }
+        }
+
+        function selectSafety(element, isCorrect) {
+            if (element.classList.contains('selected')) return;
+            
+            element.classList.add('selected');
+            
+            if (isCorrect) {
+                safetyAnswers++;
+                element.classList.add('correct');
+            } else {
+                element.style.background = 'linear-gradient(135deg, #fab1a0 0%, #e17055 100%)';
+            }
+            
+            if (safetyAnswers === 2 || document.querySelectorAll('#xiaotuziguaiguai-practice .word-card.selected').length === 4) {
+                setTimeout(() => {
+                    const resultDiv = document.getElementById('xiaotuziguaiguai-result');
+                    resultDiv.classList.remove('hidden');
+                    
+                    if (safetyAnswers === 2) {
+                        resultDiv.className = 'result-message correct';
+                        resultDiv.innerHTML = '🔐 答对了！小兔子很聪明，知道要保护自己的安全，不随便给陌生人开门！';
+                    } else {
+                        resultDiv.className = 'result-message incorrect';
+                        resultDiv.innerHTML = '再想想吧！为什么小兔子要等妈妈回来才开门呢？';
+                    }
+                }, 1000);
+            }
+        }
+
+        // 添加返回按钮样式
+        const style = document.createElement('style');
+        style.textContent = `
+            .back-button {
+                display: inline-block;
+                margin-top: 10px;
+                padding: 8px 16px;
+                background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+                color: #2c3e50;
+                text-decoration: none;
+                border-radius: 20px;
+                font-size: 14px;
+                font-weight: bold;
+                transition: all 0.3s ease;
+            }
+            .back-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3);
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html> 

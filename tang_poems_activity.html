@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>唐诗三百首 - LearnFun</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .poetry-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .poem-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .poem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .poem-title {
+            font-size: 28px;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .poem-author {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+        
+        .poem-content {
+            font-size: 20px;
+            line-height: 2;
+            text-align: center;
+            color: #34495e;
+            margin-bottom: 25px;
+            font-family: 'KaiTi', '楷体', serif;
+        }
+        
+        .poem-translation {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 16px;
+            color: #555;
+        }
+        
+        .poem-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .audio-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .practice-btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .practice-section {
+            background: #fff;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .fill-blank {
+            font-size: 18px;
+            line-height: 2;
+            color: #2c3e50;
+        }
+        
+        .blank-input {
+            border: none;
+            border-bottom: 2px solid #3498db;
+            background: transparent;
+            padding: 5px;
+            margin: 0 5px;
+            font-size: 18px;
+            text-align: center;
+            min-width: 40px;
+        }
+        
+        .blank-input:focus {
+            outline: none;
+            border-bottom-color: #e74c3c;
+        }
+        
+        .check-btn {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .result-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header>
+            <a href="index.html" class="logo-link">
+                <div class="logo">
+                    <img src="images/benny_bunny_head.png" alt="Benny Bunny Icon" class="logo-bunny-head">
+                    <h1>LearnFun</h1>
+                </div>
+            </a>
+            <div class="header-right">
+                <div class="language-selector">
+                    <select id="languageSelect" class="language-dropdown">
+                        <option value="zh">中文</option>
+                        <option value="en">English</option>
+                    </select>
+                    <div class="select-arrow"></div>
+                </div>
+                <a href="user-profile.html" class="profile-link">
+                    <img src="images/benny_bunny_head.png" alt="Profile" class="profile-icon">
+                    <span>我的档案</span>
+                </a>
+                <a href="#" class="parents-link">For Parents</a>
+            </div>
+        </header>
+
+        <main>
+            <div class="subject-header">
+                <img src="images/benny_bunny_wave.png" alt="Benny the Bunny Waving" class="subject-mascot">
+                <div class="subject-title">
+                    <h2>唐诗三百首</h2>
+                    <p>和小兔子本尼一起学习经典唐诗，感受千年诗韵之美！</p>
+                    <a href="poetry.html" class="back-button">← 返回古诗词</a>
+                </div>
+            </div>
+
+            <div class="poetry-container">
+                <!-- 静夜思 -->
+                <div class="poem-card">
+                    <h3 class="poem-title">静夜思</h3>
+                    <p class="poem-author">李白</p>
+                    <div class="poem-content">
+                        床前明月光，<br>
+                        疑是地上霜。<br>
+                        举头望明月，<br>
+                        低头思故乡。
+                    </div>
+                    <div class="poem-actions">
+                        <button class="action-btn audio-btn" onclick="playPoem('jingyesi')">🔊 朗读</button>
+                        <button class="action-btn" onclick="toggleTranslation('jingyesi')">📖 译文</button>
+                        <button class="action-btn practice-btn" onclick="togglePractice('jingyesi')">✏️ 练习</button>
+                    </div>
+                    <div id="jingyesi-translation" class="poem-translation hidden">
+                        <strong>译文：</strong>明亮的月光洒在床前的窗户纸上，以为是地上结了白霜。抬起头来看那天窗外空中的明月，不由得低下头来沉思，想起了远方的家乡。
+                    </div>
+                    <div id="jingyesi-practice" class="practice-section hidden">
+                        <h4>填空练习：</h4>
+                        <div class="fill-blank">
+                            床前<input type="text" class="blank-input" data-answer="明月">光，<br>
+                            疑是地上<input type="text" class="blank-input" data-answer="霜">。<br>
+                            举头望<input type="text" class="blank-input" data-answer="明月">，<br>
+                            低头思<input type="text" class="blank-input" data-answer="故乡">。
+                        </div>
+                        <button class="check-btn" onclick="checkAnswers('jingyesi')">检查答案</button>
+                        <div id="jingyesi-result" class="result-message hidden"></div>
+                    </div>
+                </div>
+
+                <!-- 春晓 -->
+                <div class="poem-card">
+                    <h3 class="poem-title">春晓</h3>
+                    <p class="poem-author">孟浩然</p>
+                    <div class="poem-content">
+                        春眠不觉晓，<br>
+                        处处闻啼鸟。<br>
+                        夜来风雨声，<br>
+                        花落知多少。
+                    </div>
+                    <div class="poem-actions">
+                        <button class="action-btn audio-btn" onclick="playPoem('chunxiao')">🔊 朗读</button>
+                        <button class="action-btn" onclick="toggleTranslation('chunxiao')">📖 译文</button>
+                        <button class="action-btn practice-btn" onclick="togglePractice('chunxiao')">✏️ 练习</button>
+                    </div>
+                    <div id="chunxiao-translation" class="poem-translation hidden">
+                        <strong>译文：</strong>春天睡醒不觉天已大亮，到处可以听见小鸟的鸣叫声。回想昨夜的阵阵风雨声，花儿不知道被吹落了多少。
+                    </div>
+                    <div id="chunxiao-practice" class="practice-section hidden">
+                        <h4>填空练习：</h4>
+                        <div class="fill-blank">
+                            春眠不觉<input type="text" class="blank-input" data-answer="晓">，<br>
+                            处处闻啼<input type="text" class="blank-input" data-answer="鸟">。<br>
+                            夜来<input type="text" class="blank-input" data-answer="风雨">声，<br>
+                            花落知<input type="text" class="blank-input" data-answer="多少">。
+                        </div>
+                        <button class="check-btn" onclick="checkAnswers('chunxiao')">检查答案</button>
+                        <div id="chunxiao-result" class="result-message hidden"></div>
+                    </div>
+                </div>
+
+                <!-- 登鹳雀楼 -->
+                <div class="poem-card">
+                    <h3 class="poem-title">登鹳雀楼</h3>
+                    <p class="poem-author">王之涣</p>
+                    <div class="poem-content">
+                        白日依山尽，<br>
+                        黄河入海流。<br>
+                        欲穷千里目，<br>
+                        更上一层楼。
+                    </div>
+                    <div class="poem-actions">
+                        <button class="action-btn audio-btn" onclick="playPoem('dengguanquelou')">🔊 朗读</button>
+                        <button class="action-btn" onclick="toggleTranslation('dengguanquelou')">📖 译文</button>
+                        <button class="action-btn practice-btn" onclick="togglePractice('dengguanquelou')">✏️ 练习</button>
+                    </div>
+                    <div id="dengguanquelou-translation" class="poem-translation hidden">
+                        <strong>译文：</strong>夕阳依傍着山峦慢慢沉落，滔滔黄河朝着大海汹涌奔流。若想要看遍千里的风光，那就要登上更高的一层楼。
+                    </div>
+                    <div id="dengguanquelou-practice" class="practice-section hidden">
+                        <h4>填空练习：</h4>
+                        <div class="fill-blank">
+                            白日依山<input type="text" class="blank-input" data-answer="尽">，<br>
+                            黄河入海<input type="text" class="blank-input" data-answer="流">。<br>
+                            欲穷<input type="text" class="blank-input" data-answer="千里">目，<br>
+                            更上一层<input type="text" class="blank-input" data-answer="楼">。
+                        </div>
+                        <button class="check-btn" onclick="checkAnswers('dengguanquelou')">检查答案</button>
+                        <div id="dengguanquelou-result" class="result-message hidden"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2023 Your LearnFun Site</p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleTranslation(poemId) {
+            const translation = document.getElementById(poemId + '-translation');
+            translation.classList.toggle('hidden');
+        }
+
+        function togglePractice(poemId) {
+            const practice = document.getElementById(poemId + '-practice');
+            practice.classList.toggle('hidden');
+        }
+
+        function playPoem(poemId) {
+            // 模拟朗读功能
+            const utterance = new SpeechSynthesisUtterance();
+            utterance.lang = 'zh-CN';
+            
+            const poems = {
+                'jingyesi': '床前明月光，疑是地上霜。举头望明月，低头思故乡。',
+                'chunxiao': '春眠不觉晓，处处闻啼鸟。夜来风雨声，花落知多少。',
+                'dengguanquelou': '白日依山尽，黄河入海流。欲穷千里目，更上一层楼。'
+            };
+            
+            utterance.text = poems[poemId];
+            utterance.rate = 0.7; // 慢一点朗读
+            speechSynthesis.speak(utterance);
+        }
+
+        function checkAnswers(poemId) {
+            const inputs = document.querySelectorAll(`#${poemId}-practice .blank-input`);
+            const resultDiv = document.getElementById(poemId + '-result');
+            let correct = 0;
+            let total = inputs.length;
+
+            inputs.forEach(input => {
+                const userAnswer = input.value.trim();
+                const correctAnswer = input.getAttribute('data-answer');
+                
+                if (userAnswer === correctAnswer) {
+                    input.style.borderBottomColor = '#27ae60';
+                    correct++;
+                } else {
+                    input.style.borderBottomColor = '#e74c3c';
+                }
+            });
+
+            resultDiv.classList.remove('hidden');
+            if (correct === total) {
+                resultDiv.className = 'result-message correct';
+                resultDiv.textContent = `太棒了！全部答对了！🎉`;
+            } else {
+                resultDiv.className = 'result-message incorrect';
+                resultDiv.textContent = `答对了 ${correct}/${total} 个，继续加油！💪`;
+            }
+        }
+
+        // 添加返回按钮样式
+        const style = document.createElement('style');
+        style.textContent = `
+            .back-button {
+                display: inline-block;
+                margin-top: 10px;
+                padding: 8px 16px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                text-decoration: none;
+                border-radius: 20px;
+                font-size: 14px;
+                transition: all 0.3s ease;
+            }
+            .back-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html> 

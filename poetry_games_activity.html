@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>诗词游戏 - LearnFun</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .games-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .game-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: all 0.5s ease;
+            transform: rotate(45deg) translateX(-100%);
+        }
+        
+        .game-card:hover::before {
+            transform: rotate(45deg) translateX(100%);
+        }
+        
+        .game-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+        }
+        
+        .game-card.active {
+            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+        }
+        
+        .game-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .game-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .game-description {
+            font-size: 16px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        
+        .game-area {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            min-height: 400px;
+            display: none;
+        }
+        
+        .game-area.active {
+            display: block;
+        }
+        
+        /* 诗句接龙游戏 */
+        .poem-chain {
+            text-align: center;
+        }
+        
+        .poem-display {
+            font-size: 24px;
+            color: #2c3e50;
+            margin: 30px 0;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            font-family: 'KaiTi', '楷体', serif;
+        }
+        
+        .answer-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .option-btn {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'KaiTi', '楷体', serif;
+        }
+        
+        .option-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(116, 185, 255, 0.3);
+        }
+        
+        .option-btn.correct {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+        }
+        
+        .option-btn.wrong {
+            background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+        }
+        
+        /* 填字游戏 */
+        .crossword-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 60px);
+            grid-template-rows: repeat(5, 60px);
+            gap: 2px;
+            justify-content: center;
+            margin: 30px auto;
+        }
+        
+        .crossword-cell {
+            width: 60px;
+            height: 60px;
+            border: 2px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .crossword-cell.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .crossword-cell.filled {
+            background: #d4edda;
+            border-color: #00b894;
+        }
+        
+        .crossword-cell.blocked {
+            background: #333;
+            cursor: not-allowed;
+        }
+        
+        /* 韵律匹配游戏 */
+        .rhyme-game {
+            text-align: center;
+        }
+        
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .word-chip {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            border: 2px solid transparent;
+        }
+        
+        .word-chip:hover {
+            transform: scale(1.1);
+            border-color: #fd79a8;
+        }
+        
+        .word-chip.selected {
+            background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+            color: white;
+        }
+        
+        .rhyme-pairs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .rhyme-slot {
+            background: #f8f9fa;
+            border: 2px dashed #ddd;
+            border-radius: 15px;
+            padding: 20px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .rhyme-slot.filled {
+            background: linear-gradient(135deg, #d1f2eb 0%, #a3e4d7 100%);
+            border-color: #00b894;
+        }
+        
+        /* 成就系统 */
+        .achievements {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 30px 0;
+            color: white;
+            text-align: center;
+        }
+        
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .achievement-badge {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .score-display {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            z-index: 1000;
+        }
+        
+        .game-controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .control-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .timer {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fd79a8;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header>
+            <a href="index.html" class="logo-link">
+                <div class="logo">
+                    <img src="images/benny_bunny_head.png" alt="Benny Bunny Icon" class="logo-bunny-head">
+                    <h1>LearnFun</h1>
+                </div>
+            </a>
+            <div class="header-right">
+                <div class="language-selector">
+                    <select id="languageSelect" class="language-dropdown">
+                        <option value="zh">中文</option>
+                        <option value="en">English</option>
+                    </select>
+                    <div class="select-arrow"></div>
+                </div>
+                <a href="user-profile.html" class="profile-link">
+                    <img src="images/benny_bunny_head.png" alt="Profile" class="profile-icon">
+                    <span>我的档案</span>
+                </a>
+                <a href="#" class="parents-link">For Parents</a>
+            </div>
+        </header>
+
+        <main>
+            <div class="subject-header">
+                <img src="images/benny_bunny_wave.png" alt="Benny the Bunny Waving" class="subject-mascot">
+                <div class="subject-title">
+                    <h2>诗词游戏</h2>
+                    <p>和小兔子本尼一起玩有趣的诗词游戏，在游戏中学习诗词知识！</p>
+                    <a href="poetry.html" class="back-button">← 返回古诗词</a>
+                </div>
+            </div>
+
+            <div class="score-display">
+                积分: <span id="total-score">0</span> 🏆
+            </div>
+
+            <div class="games-container">
+                <!-- 游戏选择 -->
+                <div class="game-grid">
+                    <div class="game-card" onclick="startGame('poem-chain')">
+                        <span class="game-icon">🔗</span>
+                        <h3 class="game-title">诗句接龙</h3>
+                        <p class="game-description">根据上句选择对应的下句，考验你的诗词记忆力！</p>
+                    </div>
+                    
+                    <div class="game-card" onclick="startGame('crossword')">
+                        <span class="game-icon">📝</span>
+                        <h3 class="game-title">诗词填字</h3>
+                        <p class="game-description">在格子里填入正确的字，完成经典诗句！</p>
+                    </div>
+                    
+                    <div class="game-card" onclick="startGame('rhyme-match')">
+                        <span class="game-icon">🎵</span>
+                        <h3 class="game-title">韵律匹配</h3>
+                        <p class="game-description">找出押韵的词语，体验诗词的音韵美！</p>
+                    </div>
+                    
+                    <div class="game-card" onclick="startGame('speed-challenge')">
+                        <span class="game-icon">⚡</span>
+                        <h3 class="game-title">极速挑战</h3>
+                        <p class="game-description">在限定时间内回答诗词问题，挑战你的反应速度！</p>
+                    </div>
+                </div>
+
+                <!-- 诗句接龙游戏 -->
+                <div id="poem-chain-game" class="game-area">
+                    <div class="poem-chain">
+                        <h3 style="color: #667eea; text-align: center; margin-bottom: 30px;">🔗 诗句接龙</h3>
+                        <div class="poem-display" id="poem-line">床前明月光</div>
+                        <p style="text-align: center; color: #666;">请选择下一句：</p>
+                        <div class="answer-options">
+                            <button class="option-btn" onclick="selectAnswer(this, true)">疑是地上霜</button>
+                            <button class="option-btn" onclick="selectAnswer(this, false)">春眠不觉晓</button>
+                            <button class="option-btn" onclick="selectAnswer(this, false)">白日依山尽</button>
+                            <button class="option-btn" onclick="selectAnswer(this, false)">君子之交淡如水</button>
+                        </div>
+                        <div class="game-controls">
+                            <button class="control-btn" onclick="nextPoemChain()">下一题</button>
+                            <button class="control-btn" onclick="resetGame('poem-chain')">重新开始</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 诗词填字游戏 -->
+                <div id="crossword-game" class="game-area">
+                    <div class="crossword">
+                        <h3 style="color: #667eea; text-align: center; margin-bottom: 30px;">📝 诗词填字</h3>
+                        <p style="text-align: center; color: #666; margin-bottom: 20px;">完成诗句：春眠不觉晓，处处闻啼鸟</p>
+                        <div class="crossword-grid" id="crossword-grid">
+                            <!-- 动态生成填字格 -->
+                        </div>
+                        <div class="word-bank">
+                            <div class="word-chip" onclick="selectCrosswordChar(this)">春</div>
+                            <div class="word-chip" onclick="selectCrosswordChar(this)">眠</div>
+                            <div class="word-chip" onclick="selectCrosswordChar(this)">不</div>
+                            <div class="word-chip" onclick="selectCrosswordChar(this)">觉</div>
+                            <div class="word-chip" onclick="selectCrosswordChar(this)">晓</div>
+                            <div class="word-chip" onclick="selectCrosswordChar(this)">处</div>
+                            <div class="word-chip" onclick="selectCrosswordChar(this)">闻</div>
+                            <div class="word-chip" onclick="selectCrosswordChar(this)">啼</div>
+                            <div class="word-chip" onclick="selectCrosswordChar(this)">鸟</div>
+                        </div>
+                        <div class="game-controls">
+                            <button class="control-btn" onclick="checkCrossword()">检查答案</button>
+                            <button class="control-btn" onclick="resetGame('crossword')">重新开始</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 韵律匹配游戏 -->
+                <div id="rhyme-match-game" class="game-area">
+                    <div class="rhyme-game">
+                        <h3 style="color: #667eea; text-align: center; margin-bottom: 30px;">🎵 韵律匹配</h3>
+                        <p style="text-align: center; color: #666; margin-bottom: 20px;">将押韵的词语配对</p>
+                        <div class="word-bank">
+                            <div class="word-chip" onclick="selectRhymeWord(this, 'xiang')">香</div>
+                            <div class="word-chip" onclick="selectRhymeWord(this, 'guang')">光</div>
+                            <div class="word-chip" onclick="selectRhymeWord(this, 'xiang')">祥</div>
+                            <div class="word-chip" onclick="selectRhymeWord(this, 'guang')">霜</div>
+                            <div class="word-chip" onclick="selectRhymeWord(this, 'niao')">鸟</div>
+                            <div class="word-chip" onclick="selectRhymeWord(this, 'niao')">晓</div>
+                        </div>
+                        <div class="rhyme-pairs">
+                            <div class="rhyme-slot" data-rhyme="xiang">香韵组</div>
+                            <div class="rhyme-slot" data-rhyme="guang">光韵组</div>
+                            <div class="rhyme-slot" data-rhyme="niao">鸟韵组</div>
+                            <div class="rhyme-slot" data-rhyme="empty">待分配</div>
+                        </div>
+                        <div class="game-controls">
+                            <button class="control-btn" onclick="checkRhymeMatch()">检查匹配</button>
+                            <button class="control-btn" onclick="resetGame('rhyme-match')">重新开始</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 极速挑战游戏 -->
+                <div id="speed-challenge-game" class="game-area">
+                    <div class="speed-challenge">
+                        <h3 style="color: #667eea; text-align: center; margin-bottom: 30px;">⚡ 极速挑战</h3>
+                        <div class="timer">剩余时间: <span id="timer">30</span>秒</div>
+                        <div class="poem-display" id="speed-question">下列哪句诗出自李白？</div>
+                        <div class="answer-options">
+                            <button class="option-btn" onclick="speedAnswer(this, true)">床前明月光</button>
+                            <button class="option-btn" onclick="speedAnswer(this, false)">春眠不觉晓</button>
+                            <button class="option-btn" onclick="speedAnswer(this, false)">寻寻觅觅</button>
+                            <button class="option-btn" onclick="speedAnswer(this, false)">众里寻他千百度</button>
+                        </div>
+                        <div class="game-controls">
+                            <button class="control-btn" onclick="startSpeedChallenge()" id="speed-start-btn">开始挑战</button>
+                            <button class="control-btn" onclick="resetGame('speed-challenge')">重新开始</button>
+                        </div>
+                        <div style="text-align: center; margin-top: 20px;">
+                            <p>当前得分: <span id="speed-score">0</span></p>
+                            <p>连续答对: <span id="speed-streak">0</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 成就系统 -->
+                <div class="achievements">
+                    <h3>🏆 成就徽章</h3>
+                    <div class="achievement-grid">
+                        <div class="achievement-badge">
+                            <div style="font-size: 30px;">🔰</div>
+                            <p>诗词新手</p>
+                            <small>完成第一个游戏</small>
+                        </div>
+                        <div class="achievement-badge">
+                            <div style="font-size: 30px;">📚</div>
+                            <p>博学之士</p>
+                            <small>答对50道题</small>
+                        </div>
+                        <div class="achievement-badge">
+                            <div style="font-size: 30px;">⚡</div>
+                            <p>闪电之手</p>
+                            <small>极速挑战得分超过100</small>
+                        </div>
+                        <div class="achievement-badge">
+                            <div style="font-size: 30px;">🎯</div>
+                            <p>百发百中</p>
+                            <small>连续答对10题</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2023 Your LearnFun Site</p>
+        </footer>
+    </div>
+
+    <script>
+        let currentGame = null;
+        let totalScore = 0;
+        let gameData = {
+            poemChain: {
+                questions: [
+                    {line: "床前明月光", options: ["疑是地上霜", "春眠不觉晓", "白日依山尽", "君子之交淡如水"], correct: 0},
+                    {line: "春眠不觉晓", options: ["处处闻啼鸟", "疑是地上霜", "举头望明月", "夜来风雨声"], correct: 0},
+                    {line: "白日依山尽", options: ["黄河入海流", "春眠不觉晓", "低头思故乡", "花落知多少"], correct: 0},
+                    {line: "人有悲欢离合", options: ["月有阴晴圆缺", "春眠不觉晓", "疑是地上霜", "处处闻啼鸟"], correct: 0}
+                ],
+                currentIndex: 0
+            },
+            speedChallenge: {
+                questions: [
+                    {q: "下列哪句诗出自李白？", options: ["床前明月光", "春眠不觉晓", "寻寻觅觅", "众里寻他千百度"], correct: 0},
+                    {q: "《静夜思》的作者是？", options: ["李白", "杜甫", "苏轼", "李清照"], correct: 0},
+                    {q: "下列哪句诗出自孟浩然？", options: ["春眠不觉晓", "床前明月光", "但愿人长久", "寻寻觅觅"], correct: 0}
+                ],
+                currentIndex: 0,
+                timer: 30,
+                score: 0,
+                streak: 0
+            }
+        };
+        
+        function startGame(gameType) {
+            // 隐藏所有游戏区域
+            document.querySelectorAll('.game-area').forEach(area => {
+                area.classList.remove('active');
+            });
+            
+            // 重置游戏卡片状态
+            document.querySelectorAll('.game-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // 显示选中的游戏
+            document.getElementById(gameType + '-game').classList.add('active');
+            currentGame = gameType;
+            
+            // 高亮选中的游戏卡片
+            event.currentTarget.classList.add('active');
+            
+            // 初始化特定游戏
+            if (gameType === 'crossword') {
+                initCrossword();
+            } else if (gameType === 'rhyme-match') {
+                initRhymeMatch();
+            } else if (gameType === 'poem-chain') {
+                initPoemChain();
+            }
+        }
+        
+        function selectAnswer(element, isCorrect) {
+            const options = element.parentNode.children;
+            for (let option of options) {
+                option.disabled = true;
+                if (option === element) {
+                    if (isCorrect) {
+                        option.classList.add('correct');
+                        addScore(10);
+                    } else {
+                        option.classList.add('wrong');
+                    }
+                } else if (option.onclick.toString().includes('true')) {
+                    option.classList.add('correct');
+                }
+            }
+        }
+        
+        function initPoemChain() {
+            gameData.poemChain.currentIndex = 0;
+            nextPoemChain();
+        }
+        
+        function nextPoemChain() {
+            const data = gameData.poemChain;
+            if (data.currentIndex >= data.questions.length) {
+                data.currentIndex = 0; // 重新开始
+            }
+            
+            const question = data.questions[data.currentIndex];
+            document.getElementById('poem-line').textContent = question.line;
+            
+            const optionBtns = document.querySelectorAll('#poem-chain-game .option-btn');
+            optionBtns.forEach((btn, index) => {
+                btn.textContent = question.options[index];
+                btn.disabled = false;
+                btn.className = 'option-btn';
+                btn.onclick = () => selectAnswer(btn, index === question.correct);
+            });
+            
+            data.currentIndex++;
+        }
+        
+        function initCrossword() {
+            const grid = document.getElementById('crossword-grid');
+            grid.innerHTML = '';
+            
+            // 创建5x5的填字格（简化版）
+            const pattern = [
+                ['春', '', '不', '', '晓'],
+                ['', '', '', '', ''],
+                ['处', '', '闻', '', '鸟'],
+                ['', '', '', '', ''],
+                ['', '', '', '', '']
+            ];
+            
+            pattern.forEach((row, i) => {
+                row.forEach((cell, j) => {
+                    const cellDiv = document.createElement('div');
+                    cellDiv.className = 'crossword-cell';
+                    if (cell === '') {
+                        cellDiv.classList.add('blocked');
+                    } else {
+                        cellDiv.setAttribute('data-char', cell);
+                        cellDiv.onclick = () => fillCrosswordCell(cellDiv);
+                    }
+                    grid.appendChild(cellDiv);
+                });
+            });
+        }
+        
+        let selectedChar = null;
+        
+        function selectCrosswordChar(element) {
+            document.querySelectorAll('.word-chip').forEach(chip => chip.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedChar = element.textContent;
+        }
+        
+        function fillCrosswordCell(cell) {
+            if (!selectedChar || cell.classList.contains('blocked')) return;
+            
+            cell.textContent = selectedChar;
+            cell.classList.add('filled');
+            
+            // 移除使用过的字符
+            const selectedChip = document.querySelector('.word-chip.selected');
+            if (selectedChip) {
+                selectedChip.style.opacity = '0.3';
+                selectedChip.onclick = null;
+            }
+            
+            selectedChar = null;
+            document.querySelectorAll('.word-chip').forEach(chip => chip.classList.remove('selected'));
+        }
+        
+        function checkCrossword() {
+            const cells = document.querySelectorAll('.crossword-cell:not(.blocked)');
+            let correct = 0;
+            let total = 0;
+            
+            cells.forEach(cell => {
+                total++;
+                const expected = cell.getAttribute('data-char');
+                const actual = cell.textContent;
+                if (expected === actual) {
+                    correct++;
+                    cell.style.background = '#d4edda';
+                } else {
+                    cell.style.background = '#f8d7da';
+                }
+            });
+            
+            if (correct === total) {
+                addScore(20);
+                alert('🎉 恭喜完成填字游戏！');
+            } else {
+                alert(`答对了 ${correct}/${total} 个字，继续加油！`);
+            }
+        }
+        
+        function initRhymeMatch() {
+            // 重置韵律匹配游戏
+            document.querySelectorAll('.word-chip').forEach(chip => {
+                chip.classList.remove('selected');
+                chip.style.opacity = '1';
+            });
+            
+            document.querySelectorAll('.rhyme-slot').forEach(slot => {
+                slot.classList.remove('filled');
+                const rhyme = slot.getAttribute('data-rhyme');
+                if (rhyme && rhyme !== 'empty') {
+                    slot.textContent = rhyme + '韵组';
+                } else {
+                    slot.textContent = '待分配';
+                }
+            });
+        }
+        
+        let selectedRhymeWord = null;
+        
+        function selectRhymeWord(element, rhyme) {
+            if (element.style.opacity === '0.3') return;
+            
+            document.querySelectorAll('.word-chip').forEach(chip => chip.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedRhymeWord = {element: element, rhyme: rhyme, text: element.textContent};
+            
+            // 高亮对应的韵律槽
+            document.querySelectorAll('.rhyme-slot').forEach(slot => {
+                if (slot.getAttribute('data-rhyme') === rhyme) {
+                    slot.style.border = '3px solid #fd79a8';
+                } else {
+                    slot.style.border = '2px dashed #ddd';
+                }
+            });
+        }
+        
+        function checkRhymeMatch() {
+            // 这里可以添加韵律匹配的检查逻辑
+            addScore(15);
+            alert('🎵 韵律匹配完成！');
+        }
+        
+        function startSpeedChallenge() {
+            const data = gameData.speedChallenge;
+            data.timer = 30;
+            data.score = 0;
+            data.streak = 0;
+            data.currentIndex = 0;
+            
+            document.getElementById('speed-start-btn').style.display = 'none';
+            
+            const timerInterval = setInterval(() => {
+                data.timer--;
+                document.getElementById('timer').textContent = data.timer;
+                
+                if (data.timer <= 0) {
+                    clearInterval(timerInterval);
+                    endSpeedChallenge();
+                }
+            }, 1000);
+            
+            nextSpeedQuestion();
+        }
+        
+        function nextSpeedQuestion() {
+            const data = gameData.speedChallenge;
+            if (data.currentIndex >= data.questions.length) {
+                data.currentIndex = 0;
+            }
+            
+            const question = data.questions[data.currentIndex];
+            document.getElementById('speed-question').textContent = question.q;
+            
+            const optionBtns = document.querySelectorAll('#speed-challenge-game .option-btn');
+            optionBtns.forEach((btn, index) => {
+                btn.textContent = question.options[index];
+                btn.disabled = false;
+                btn.className = 'option-btn';
+                btn.onclick = () => speedAnswer(btn, index === question.correct);
+            });
+            
+            data.currentIndex++;
+        }
+        
+        function speedAnswer(element, isCorrect) {
+            const data = gameData.speedChallenge;
+            
+            if (isCorrect) {
+                element.classList.add('correct');
+                data.score += 10;
+                data.streak++;
+                addScore(10);
+            } else {
+                element.classList.add('wrong');
+                data.streak = 0;
+            }
+            
+            document.getElementById('speed-score').textContent = data.score;
+            document.getElementById('speed-streak').textContent = data.streak;
+            
+            // 禁用所有选项
+            document.querySelectorAll('#speed-challenge-game .option-btn').forEach(btn => btn.disabled = true);
+            
+            setTimeout(() => {
+                if (data.timer > 0) {
+                    nextSpeedQuestion();
+                }
+            }, 1000);
+        }
+        
+        function endSpeedChallenge() {
+            const data = gameData.speedChallenge;
+            alert(`⚡ 极速挑战结束！\n最终得分：${data.score}\n最高连击：${data.streak}`);
+            document.getElementById('speed-start-btn').style.display = 'inline-block';
+        }
+        
+        function addScore(points) {
+            totalScore += points;
+            document.getElementById('total-score').textContent = totalScore;
+        }
+        
+        function resetGame(gameType) {
+            if (gameType === 'poem-chain') {
+                initPoemChain();
+            } else if (gameType === 'crossword') {
+                initCrossword();
+            } else if (gameType === 'rhyme-match') {
+                initRhymeMatch();
+            } else if (gameType === 'speed-challenge') {
+                gameData.speedChallenge.timer = 30;
+                gameData.speedChallenge.score = 0;
+                gameData.speedChallenge.streak = 0;
+                document.getElementById('timer').textContent = '30';
+                document.getElementById('speed-score').textContent = '0';
+                document.getElementById('speed-streak').textContent = '0';
+                document.getElementById('speed-start-btn').style.display = 'inline-block';
+            }
+        }
+
+        // 添加返回按钮样式
+        const style = document.createElement('style');
+        style.textContent = `
+            .back-button {
+                display: inline-block;
+                margin-top: 10px;
+                padding: 8px 16px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                text-decoration: none;
+                border-radius: 20px;
+                font-size: 14px;
+                transition: all 0.3s ease;
+            }
+            .back-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html> 

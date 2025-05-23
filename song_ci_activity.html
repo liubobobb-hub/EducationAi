@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宋词欣赏 - LearnFun</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .poetry-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .ci-card {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .ci-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .ci-title {
+            font-size: 28px;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .ci-author {
+            text-align: center;
+            color: #636e72;
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+        
+        .ci-content {
+            font-size: 18px;
+            line-height: 2.2;
+            text-align: center;
+            color: #2d3436;
+            margin-bottom: 25px;
+            font-family: 'KaiTi', '楷体', serif;
+        }
+        
+        .ci-translation {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 16px;
+            color: #555;
+        }
+        
+        .ci-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(232, 67, 147, 0.3);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(232, 67, 147, 0.4);
+        }
+        
+        .audio-btn {
+            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+        }
+        
+        .practice-btn {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+        }
+        
+        .analysis-btn {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .practice-section {
+            background: #fff;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .analysis-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .fill-blank {
+            font-size: 18px;
+            line-height: 2.2;
+            color: #2c3e50;
+        }
+        
+        .blank-input {
+            border: none;
+            border-bottom: 2px solid #fd79a8;
+            background: transparent;
+            padding: 5px;
+            margin: 0 5px;
+            font-size: 18px;
+            text-align: center;
+            min-width: 50px;
+        }
+        
+        .blank-input:focus {
+            outline: none;
+            border-bottom-color: #e84393;
+        }
+        
+        .check-btn {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .result-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .ci-meter {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header>
+            <a href="index.html" class="logo-link">
+                <div class="logo">
+                    <img src="images/benny_bunny_head.png" alt="Benny Bunny Icon" class="logo-bunny-head">
+                    <h1>LearnFun</h1>
+                </div>
+            </a>
+            <div class="header-right">
+                <div class="language-selector">
+                    <select id="languageSelect" class="language-dropdown">
+                        <option value="zh">中文</option>
+                        <option value="en">English</option>
+                    </select>
+                    <div class="select-arrow"></div>
+                </div>
+                <a href="user-profile.html" class="profile-link">
+                    <img src="images/benny_bunny_head.png" alt="Profile" class="profile-icon">
+                    <span>我的档案</span>
+                </a>
+                <a href="#" class="parents-link">For Parents</a>
+            </div>
+        </header>
+
+        <main>
+            <div class="subject-header">
+                <img src="images/benny_bunny_wave.png" alt="Benny the Bunny Waving" class="subject-mascot">
+                <div class="subject-title">
+                    <h2>宋词欣赏</h2>
+                    <p>和小兔子本尼一起品味宋词的优美韵律，感受文人的情怀！</p>
+                    <a href="poetry.html" class="back-button">← 返回古诗词</a>
+                </div>
+            </div>
+
+            <div class="poetry-container">
+                <!-- 水调歌头 -->
+                <div class="ci-card">
+                    <h3 class="ci-title">水调歌头·明月几时有</h3>
+                    <p class="ci-author">苏轼</p>
+                    <p class="ci-meter">中秋月夜怀人之作</p>
+                    <div class="ci-content">
+                        明月几时有？把酒问青天。<br>
+                        不知天上宫阙，今夕是何年。<br>
+                        我欲乘风归去，又恐琼楼玉宇，<br>
+                        高处不胜寒。<br>
+                        起舞弄清影，何似在人间。<br><br>
+                        转朱阁，低绮户，照无眠。<br>
+                        不应有恨，何事长向别时圆？<br>
+                        人有悲欢离合，月有阴晴圆缺，<br>
+                        此事古难全。<br>
+                        但愿人长久，千里共婵娟。
+                    </div>
+                    <div class="ci-actions">
+                        <button class="action-btn audio-btn" onclick="playCi('shuidiaogetou')">🔊 朗读</button>
+                        <button class="action-btn" onclick="toggleTranslation('shuidiaogetou')">📖 译文</button>
+                        <button class="action-btn analysis-btn" onclick="toggleAnalysis('shuidiaogetou')">🔍 赏析</button>
+                        <button class="action-btn practice-btn" onclick="togglePractice('shuidiaogetou')">✏️ 练习</button>
+                    </div>
+                    <div id="shuidiaogetou-translation" class="ci-translation hidden">
+                        <strong>译文：</strong>明月从什么时候开始有的呢？端起酒杯来询问青天。不知道天上的宫殿，今天晚上是何年何月。我想要乘御清风回到天上，又担心琼楼玉宇太高，无法承受那里的寒冷。翩翩起舞玩赏着月下清影，哪像是在人间。<br><br>
+                        月儿转过朱红色的楼阁，低低地挂在雕花的窗户上，照着没有睡意的人。明月不应该对人们有什么怨恨，为什么偏在人们离别时才圆呢？人有悲欢离合的变迁，月有阴晴圆缺的转换，这种事自古来难以周全。只希望人们能够永远健康平安，虽然相隔千里，也能一起欣赏这美好的月光。
+                    </div>
+                    <div id="shuidiaogetou-analysis" class="analysis-section hidden">
+                        <h4>词作赏析：</h4>
+                        <p><strong>创作背景：</strong>此词作于宋神宗熙宁九年（1076年）中秋，作者在密州（今山东诸城）任知州。此时苏轼与弟弟苏辙已经七年未见，思念之情溢于言表。</p>
+                        <p><strong>艺术特色：</strong>词人以超现实的幻想，以浪漫主义的手法，通过对月亮的描写和对人生的思考，表达了对美好生活的向往和对亲人的思念。</p>
+                        <p><strong>名句解析：</strong>"但愿人长久，千里共婵娟"成为千古传诵的名句，表达了对离别亲人的美好祝愿。</p>
+                    </div>
+                    <div id="shuidiaogetou-practice" class="practice-section hidden">
+                        <h4>填空练习：</h4>
+                        <div class="fill-blank">
+                            明月几时有？把酒问<input type="text" class="blank-input" data-answer="青天">。<br>
+                            不知天上宫阙，今夕是<input type="text" class="blank-input" data-answer="何年">。<br><br>
+                            人有<input type="text" class="blank-input" data-answer="悲欢离合">，月有<input type="text" class="blank-input" data-answer="阴晴圆缺">，<br>
+                            此事古难全。<br>
+                            但愿人<input type="text" class="blank-input" data-answer="长久">，千里共<input type="text" class="blank-input" data-answer="婵娟">。
+                        </div>
+                        <button class="check-btn" onclick="checkAnswers('shuidiaogetou')">检查答案</button>
+                        <div id="shuidiaogetou-result" class="result-message hidden"></div>
+                    </div>
+                </div>
+
+                <!-- 声声慢 -->
+                <div class="ci-card">
+                    <h3 class="ci-title">声声慢·寻寻觅觅</h3>
+                    <p class="ci-author">李清照</p>
+                    <p class="ci-meter">抒发国破家亡的悲愁</p>
+                    <div class="ci-content">
+                        寻寻觅觅，冷冷清清，<br>
+                        凄凄惨惨戚戚。<br>
+                        乍暖还寒时候，最难将息。<br>
+                        三杯两盏淡酒，<br>
+                        怎敌他、晚来风急？<br>
+                        雁过也，正伤心，<br>
+                        却是旧时相识。<br><br>
+                        满地黄花堆积。<br>
+                        憔悴损，如今有谁堪摘？<br>
+                        守着窗儿，<br>
+                        独自怎生得黑？<br>
+                        梧桐更兼细雨，<br>
+                        到黄昏、点点滴滴。<br>
+                        这次第，<br>
+                        怎一个愁字了得！
+                    </div>
+                    <div class="ci-actions">
+                        <button class="action-btn audio-btn" onclick="playCi('shengshengman')">🔊 朗读</button>
+                        <button class="action-btn" onclick="toggleTranslation('shengshengman')">📖 译文</button>
+                        <button class="action-btn analysis-btn" onclick="toggleAnalysis('shengshengman')">🔍 赏析</button>
+                        <button class="action-btn practice-btn" onclick="togglePractice('shengshengman')">✏️ 练习</button>
+                    </div>
+                    <div id="shengshengman-translation" class="ci-translation hidden">
+                        <strong>译文：</strong>苦苦地寻寻觅觅，却只见冷冷清清，怎不让人凄惨悲戚。乍暖还寒的时节，最难保养休息。喝三杯两盏淡酒，怎么能抵挡晚上的寒风急袭？一行大雁从眼前飞过，更让人伤心，因为都是旧日的相识。<br><br>
+                        园中菊花堆积满地，都已经憔悴不堪，如今还有谁来采摘？冷清清地守着窗子，独自一个人怎么熬到天黑？梧桐叶上细雨淋漓，到黄昏时分，还是点点滴滴。这种种情况，怎么能用一个"愁"字概括得了！
+                    </div>
+                    <div id="shengshengman-analysis" class="analysis-section hidden">
+                        <h4>词作赏析：</h4>
+                        <p><strong>创作背景：</strong>这首词是李清照后期的代表作，写于南渡以后。当时金兵入侵，北宋灭亡，丈夫赵明诚病死，词人孤苦无依。</p>
+                        <p><strong>艺术特色：</strong>开头连用十四个叠字，音韵和谐，读起来朗朗上口，营造出孤寂凄凉的氛围。</p>
+                        <p><strong>名句解析：</strong>"这次第，怎一个愁字了得！"以反问句收束全词，言有尽而意无穷。</p>
+                    </div>
+                    <div id="shengshengman-practice" class="practice-section hidden">
+                        <h4>填空练习：</h4>
+                        <div class="fill-blank">
+                            寻寻觅觅，<input type="text" class="blank-input" data-answer="冷冷清清">，<br>
+                            凄凄惨惨戚戚。<br><br>
+                            满地黄花<input type="text" class="blank-input" data-answer="堆积">。<br>
+                            憔悴损，如今有谁堪<input type="text" class="blank-input" data-answer="摘">？<br><br>
+                            这次第，<br>
+                            怎一个<input type="text" class="blank-input" data-answer="愁">字了得！
+                        </div>
+                        <button class="check-btn" onclick="checkAnswers('shengshengman')">检查答案</button>
+                        <div id="shengshengman-result" class="result-message hidden"></div>
+                    </div>
+                </div>
+
+                <!-- 青玉案 -->
+                <div class="ci-card">
+                    <h3 class="ci-title">青玉案·元夕</h3>
+                    <p class="ci-author">辛弃疾</p>
+                    <p class="ci-meter">元宵佳节的繁华与寂寞</p>
+                    <div class="ci-content">
+                        东风夜放花千树，<br>
+                        更吹落、星如雨。<br>
+                        宝马雕车香满路。<br>
+                        凤箫声动，<br>
+                        玉壶光转，<br>
+                        一夜鱼龙舞。<br><br>
+                        蛾儿雪柳黄金缕，<br>
+                        笑语盈盈暗香去。<br>
+                        众里寻他千百度，<br>
+                        蓦然回首，<br>
+                        那人却在，<br>
+                        灯火阑珊处。
+                    </div>
+                    <div class="ci-actions">
+                        <button class="action-btn audio-btn" onclick="playCi('qingyuan')">🔊 朗读</button>
+                        <button class="action-btn" onclick="toggleTranslation('qingyuan')">📖 译文</button>
+                        <button class="action-btn analysis-btn" onclick="toggleAnalysis('qingyuan')">🔍 赏析</button>
+                        <button class="action-btn practice-btn" onclick="togglePractice('qingyuan')">✏️ 练习</button>
+                    </div>
+                    <div id="qingyuan-translation" class="ci-translation hidden">
+                        <strong>译文：</strong>东风吹开了元宵夜的花千树，又吹落了满天繁星如雨。宝马拉着雕花车载着美人驶过，满路飘散着香风。凤箫声悠扬地响起，玉壶般的明月渐渐西斜，一夜舞鱼灯、龙灯不停，笑语喧哗。<br><br>
+                        美人头上戴着蛾儿、雪柳、黄金丝，笑语盈盈地从面前经过，身上散发出淡淡香气。我在人群中寻找她千百回，猛然回头，那人却在，那灯火寥落的地方。
+                    </div>
+                    <div id="qingyuan-analysis" class="analysis-section hidden">
+                        <h4>词作赏析：</h4>
+                        <p><strong>创作背景：</strong>此词写于辛弃疾被罢官闲居期间，通过对元宵节热闹景象的描写，反衬出自己的孤独和对理想的坚持。</p>
+                        <p><strong>艺术特色：</strong>上阙写元宵节的繁华热闹，下阙写寻找意中人的过程，以"蓦然回首"的转折创造出优美的意境。</p>
+                        <p><strong>名句解析：</strong>"众里寻他千百度，蓦然回首，那人却在，灯火阑珊处"后来被用来形容苦苦追求而终有所得的喜悦。</p>
+                    </div>
+                    <div id="qingyuan-practice" class="practice-section hidden">
+                        <h4>填空练习：</h4>
+                        <div class="fill-blank">
+                            东风夜放<input type="text" class="blank-input" data-answer="花千树">，<br>
+                            更吹落、星如雨。<br><br>
+                            众里寻他<input type="text" class="blank-input" data-answer="千百度">，<br>
+                            蓦然回首，<br>
+                            那人却在，<br>
+                            <input type="text" class="blank-input" data-answer="灯火阑珊">处。
+                        </div>
+                        <button class="check-btn" onclick="checkAnswers('qingyuan')">检查答案</button>
+                        <div id="qingyuan-result" class="result-message hidden"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2023 Your LearnFun Site</p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleTranslation(ciId) {
+            const translation = document.getElementById(ciId + '-translation');
+            translation.classList.toggle('hidden');
+        }
+
+        function toggleAnalysis(ciId) {
+            const analysis = document.getElementById(ciId + '-analysis');
+            analysis.classList.toggle('hidden');
+        }
+
+        function togglePractice(ciId) {
+            const practice = document.getElementById(ciId + '-practice');
+            practice.classList.toggle('hidden');
+        }
+
+        function playCi(ciId) {
+            const utterance = new SpeechSynthesisUtterance();
+            utterance.lang = 'zh-CN';
+            
+            const cis = {
+                'shuidiaogetou': '明月几时有？把酒问青天。不知天上宫阙，今夕是何年。我欲乘风归去，又恐琼楼玉宇，高处不胜寒。起舞弄清影，何似在人间。转朱阁，低绮户，照无眠。不应有恨，何事长向别时圆？人有悲欢离合，月有阴晴圆缺，此事古难全。但愿人长久，千里共婵娟。',
+                'shengshengman': '寻寻觅觅，冷冷清清，凄凄惨惨戚戚。乍暖还寒时候，最难将息。三杯两盏淡酒，怎敌他、晚来风急？雁过也，正伤心，却是旧时相识。满地黄花堆积。憔悴损，如今有谁堪摘？守着窗儿，独自怎生得黑？梧桐更兼细雨，到黄昏、点点滴滴。这次第，怎一个愁字了得！',
+                'qingyuan': '东风夜放花千树，更吹落、星如雨。宝马雕车香满路。凤箫声动，玉壶光转，一夜鱼龙舞。蛾儿雪柳黄金缕，笑语盈盈暗香去。众里寻他千百度，蓦然回首，那人却在，灯火阑珊处。'
+            };
+            
+            utterance.text = cis[ciId];
+            utterance.rate = 0.6; // 更慢的朗读速度
+            speechSynthesis.speak(utterance);
+        }
+
+        function checkAnswers(ciId) {
+            const inputs = document.querySelectorAll(`#${ciId}-practice .blank-input`);
+            const resultDiv = document.getElementById(ciId + '-result');
+            let correct = 0;
+            let total = inputs.length;
+
+            inputs.forEach(input => {
+                const userAnswer = input.value.trim();
+                const correctAnswer = input.getAttribute('data-answer');
+                
+                if (userAnswer === correctAnswer) {
+                    input.style.borderBottomColor = '#00b894';
+                    correct++;
+                } else {
+                    input.style.borderBottomColor = '#fd79a8';
+                }
+            });
+
+            resultDiv.classList.remove('hidden');
+            if (correct === total) {
+                resultDiv.className = 'result-message correct';
+                resultDiv.textContent = `太棒了！全部答对了！🎉`;
+            } else {
+                resultDiv.className = 'result-message incorrect';
+                resultDiv.textContent = `答对了 ${correct}/${total} 个，继续加油！💪`;
+            }
+        }
+
+        // 添加返回按钮样式
+        const style = document.createElement('style');
+        style.textContent = `
+            .back-button {
+                display: inline-block;
+                margin-top: 10px;
+                padding: 8px 16px;
+                background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+                color: white;
+                text-decoration: none;
+                border-radius: 20px;
+                font-size: 14px;
+                transition: all 0.3s ease;
+            }
+            .back-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(232, 67, 147, 0.3);
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html> 
